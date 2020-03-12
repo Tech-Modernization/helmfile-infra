@@ -6,11 +6,15 @@ It follows the RED method (Requests Rate, Errors, Duration) and is a data-dri
 
 jsonnet is used to build our rules and dashboards files from jsonnet input files. 
 
+(jsonnet-dashboard.png "jsonnet dashboard")
+
 For kubeapi
 * spec-kubeapi.jsonnet: as much data-only specification as possible (thresholds, rules and dashboards formulas)
  * alerts-kubeapi.jsonnet: outputs Prometheus alerts
  * rules-kubeapi.jsonnet: outputs Prometheus recording rules
  * dash-kubeapi.jsonnet: outputs Grafana dashboards, using grafonnet-lib via our opinionated grafana.libsonnet
+
+(jsonnet-workflow.png "jsonnet workflow")
 
 The resulting rules/alerts json can be converted to yaml and used directly to configure prometheus and grafana.
 
@@ -66,7 +70,7 @@ record: kubernetes:job_verb= _code_instance:apiserver_requests:rate5m
 	expr: | sum by(job, verb, code, instance) (rate(apiserver_request_count[5m]))
 ```
 
-Using above metric, create a new kubernetes:job_verb_code_instance:apiserver_requests:ratio_rate5m for the requests ;ratios (over total): 
+Using above metric, create a new kubernetes:job_verb_code_instance:apiserver_requests:ratio_rate5m for the requests ratios (over total): 
 ```
 record: kubernetes:job_verb_code_instance:apiserver_requests:ratio=
 	_rate5m
@@ -96,10 +100,10 @@ record: kubernetes::job:sl=
 	    *
 	  kubernetes::job:apiserver_latency:pctl90rate5m < bool 200
 ```
-	 
 ## Writing Prometheus alerting rules
-The above kubernetes::job:slo_kube_api_ok final metric is very useful for dashboards and accounting for SLO compliance, but we should alert on which of above metrics is driving the SLO off, as shown the following Prometheus alert rules:
+The above kubernetes::job:slo_kube_api_ok final metric is very useful for dashboards and accounting for SLO compliance, but we should alert on which of above metrics is driving the SLO off, as shown the following Prometheus alert 
 ```
+  rules:
 	Alert on high API error ratio: alert: KubeAPIErrorRatioHigh
 	expr: |
 	  sum by(instance) (
@@ -121,10 +125,12 @@ Note that the Prometheus rules are taken from the already manifested jsonnet out
 
 ## Programmatically creating Grafana dashboards
 Creating Grafana dashboards is usually done by interacting with the UI. This is fine for simple and/or "standard" dashboards (as for example, downloaded from https://grafana.com/dashboards), but becomes cumbersome if you want to implement best devops practices, especially for gitops workflows. The community is addressing this issue via efforts, such as Grafana libraries for jsonnet, python, and Javascript. For jsonnet implementation with grafana you can use grafonnet-lib.
-With this jsonnet approach, we can re-use these jsonnet "libraries" to build many Grafana dashboards.   The <code>jsonnet files are a single source of truth for these dashboards and alerts.
+With this jsonnet approach, we can re-use these jsonnet "libraries" to build many Grafana dashboards.   
+
+The jsonnet files are a single source of truth for these dashboards and alerts.
 
 referring to $.slo.error_ratio_threshold in our Grafana dashboards to set Grafana graph panel's thresholds property, as we did above for our Prometheus alert rules.
-referring to created Prometheus recorded rules via jsonnet, an excerpt from [spec-kubeapi.jsonnet], note the metric.rules.requests_ratiorate_job_verb_code.record usage (instead of verbatim 'kubernetes:job_verb_code_instance:apiserver_requestratio_rate5m'): 
+referring to created Prometheus recorded rules via jsonnet, note the metric.rules.requests_ratiorate_job_verb_code.record usage (instead of verbatim 'kubernetes:job_verb_code_instance:apiserver_requestratio_rate5m'): 
 
 Graph showing all requests ratios
 ```
@@ -136,5 +142,5 @@ Graph showing all requests ratios
 ```
 	 
 ## References
-* [Implementing Kubernetes SLOs in Prometheus and Grafana using jsonnet](https://engineering.bitnami.com/articles/implementing-slos-using-prometheus.htmlt)
+* [Implementing Kubernetes SLOs in Prometheus and Grafana using jsonnet](https://engineering.bitnami.com/articles/implementing-slos-using-prometheus.html)
 * [srecon17_americas_slides_wilkinson.pdf](https://www.usenix.org/sites/default/files/conference/protected-files/srecon17_americas_slides_wilkinson.pdf)
