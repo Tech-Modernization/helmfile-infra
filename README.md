@@ -198,7 +198,7 @@ The myapp-prometheus-operator standard alerts includes ***PrometheusNotConnected
 SLO dashboards are generated using jsonnet using a IaC approach.  
 helmfile hooks trigger generation of prometheus rules, prometheus alerts, and grafana dashboards for **kubeapi** and **myappapi** specs, and these are deployed to prometheus.
 A standardized RED method (Request Rate, Errors, Duration) using a data-driven IaC approach based on https://github.com/bitnami-labs/kubernetes-grafana-dashboards
-See [JSSONNET.md](JSSONNET.md) for more info
+See [JSONNET.md](JSONNET.md) for more info
 
 ## Sonarqube
 SonarQube is an open-source continous code inspection tools which empowers developers to write cleaner and safer code.
