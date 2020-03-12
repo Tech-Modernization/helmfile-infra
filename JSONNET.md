@@ -17,9 +17,8 @@ The resulting rules/alerts json can be converted to yaml and used directly to co
 ## SLO Target and Metrics Thresholds
 Let's define a simple target:
 * SLO: 99%, from the following:
-* SLIs:
- * error ratio under 1%
- * latency under 200ms for 90th&nbsp;percentile of requests
+* SLI error ratio under 1%
+* SLI latency under 200ms for 90th percentile of requests
 
 Writing above spec as jsonnet
 
@@ -34,13 +33,13 @@ slo:: {
 
 ## SLI
 The Kubernetes API exposes several metrics we can use as SLIs, using the Prometheus rate() function over a short period (here we choose 5min, this number should be a few times your scraping interval):
-```
 apiserver_request_count: counts all the requests by verb, code, resource, e.g. to get the total error ratio for the last 5min: 
+
 ```
 sum(rate(apiserver_request_count{code=3D~"5.."}[5m])) / sum(rate(apiserver_request_count[5m])) 
 ```
 
-* The formula above discards all metrics labels (for example, by http&nbsp;verb, code). If you want to keep some labels, you'd need to do something similar to the following: 
+The formula above discards all metrics labels (for example, by http verb, code). If you want to keep some labels, you'd need to do something similar to the following: 
 ```
 sum by (verb, code) (rate(apiserver_request_=
  count{code=3D~"5.."}[5m]))
@@ -79,7 +78,7 @@ record: kubernetes:job_verb_code_instance:apiserver_requests:ratio=
 	  )
 ```
 
-Using above ratio metrics (for every http code&nbsp;and verb), create a new one to capture the error ratios: 
+Using above ratio metrics (for every http code and verb), create a new one to capture the error ratios: 
 ```
 record: kub= ernetes:job:apiserver_request_errors:ratio_rate5m
 expr: |
@@ -122,7 +121,7 @@ The above kubernetes::job:slo_kube_api_ok final metric is very useful for dash
 Note that the Prometheus rules are taken from the already manifested jsonnet output, which can be found in [our sources][bitnami-labs/kubernetes-grafana-dashboards] and the thresholds are evaluated from $.slo.error_ratio_threshold and $.slo.latency_threshold respectively.
 
 ## Programmatically creating Grafana dashboards
-Creating Grafana dashboards is usually done by interacting with the UI. This is fine for simple and/or "standard" dashboards (as for example, downloaded from https://grafana.com/dashboards), but becomes cumbersome if you want to implement best devops practices, especially for&nbsp;gitops workflows. The community is addressing this issue via efforts, such as Grafana libraries for jsonnet, python, and Javascript. For jsonnet implementation with grafana you can use grafonnet-lib.
+Creating Grafana dashboards is usually done by interacting with the UI. This is fine for simple and/or "standard" dashboards (as for example, downloaded from https://grafana.com/dashboards), but becomes cumbersome if you want to implement best devops practices, especially for gitops workflows. The community is addressing this issue via efforts, such as Grafana libraries for jsonnet, python, and Javascript. For jsonnet implementation with grafana you can use grafonnet-lib.
 With this jsonnet approach, we can re-use these jsonnet "libraries" to build many Grafana dashboards.   The <code>jsonnet files are a single source of truth for these dashboards and alerts.
 
 referring to $.slo.error_ratio_threshold in our Grafana dashboards to set Grafana graph panel's thresholds property, as we did above for our Prometheus alert rules.
