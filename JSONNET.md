@@ -6,7 +6,7 @@ It follows the RED method (Requests Rate, Errors, Duration) and is a data-dri
 
 jsonnet is used to build our rules and dashboards files from jsonnet input files. 
 
-(jsonnet-dashboard.png "jsonnet dashboard")
+![dashboard](jsonnet-dashboard.png "jsonnet dashboard")
 
 For kubeapi
 * spec-kubeapi.jsonnet: as much data-only specification as possible (thresholds, rules and dashboards formulas)
@@ -14,7 +14,7 @@ For kubeapi
  * rules-kubeapi.jsonnet: outputs Prometheus recording rules
  * dash-kubeapi.jsonnet: outputs Grafana dashboards, using grafonnet-lib via our opinionated grafana.libsonnet
 
-(jsonnet-workflow.png "jsonnet workflow")
+![dashboard](jsonnet-workflow.png "jsonnet workflow")
 
 The resulting rules/alerts json can be converted to yaml and used directly to configure prometheus and grafana.
 
