@@ -47,7 +47,7 @@ sum by (verb, code) (rate(apiserver_request_=
  sum (rate(apiserver_request_count[5m]))
 ```
 	
-* apiserver_request_latencies_bucket: latency histogram by verb. For example, to get the 90th latency quantile in milliseconds: (note that the le "less or equal" label is special, as it sets the histogram buckets intervals, see [Prometheus histograms and summaries][promql-histogram]): 
+apiserver_request_latencies_bucket: latency histogram by verb. For example, to get the 90th latency quantile in milliseconds: (note that the le "less or equal" label is special, as it sets the histogram buckets intervals, see [Prometheus histograms and summaries]: 
 ```
 histogram_quantile (0.90,
  sum by (le, verb, instance)(
@@ -55,15 +55,15 @@ histogram_quantile (0.90,
   )
 ) / 1e3
 ```
-	 
 ## Writing Prometheus rules to record the chosen SLIs
 PromQL is a very powerful language, although as of October 2018, it doesn't yet support nested subqueries for ranges (see Prometheus issue 1227 for details), a feature we'll need to be able to compute time ratio for error ratio or latency outside their thresholds.
 Also, as good practice, to lower query-time Prometheus resource usage, it is recommended to always add recording rules to precompute expressions such as sum(rate(...)) anyway.
-As an example of how to do this, the following set of recording rules are built from our [bitnami-labs/kubernetes-grafana-dashboards] repository to capture the above time ratio:
+As an example of how to do this, the following set of recording rules are built to capture the above time ratio:
+
 Create a new kubernetes:job_verb_code_instance:apiserver_requests:rate5m metric to record requests rates: 
 ```
 record: kubernetes:job_verb= _code_instance:apiserver_requests:rate5m
-expr: | sum by(job, verb, code, instance) (rate(apiserver_request_count[5m]))
+	expr: | sum by(job, verb, code, instance) (rate(apiserver_request_count[5m]))
 ```
 
 Using above metric, create a new kubernetes:job_verb_code_instance:apiserver_requests:ratio_rate5m for the requests ;ratios (over total): 
@@ -81,13 +81,12 @@ record: kubernetes:job_verb_code_instance:apiserver_requests:ratio=
 Using above ratio metrics (for every http code and verb), create a new one to capture the error ratios: 
 ```
 record: kub= ernetes:job:apiserver_request_errors:ratio_rate5m
-expr: |
- sum by(job) (
-   kubernetes:job_verb_code_instance:apiserver_requests:ratio_rate5m
-      {code=3D~"5..",verb=3D~"GET|POST|DELETE|PATCH"}
-  )
+	expr: |
+	 sum by(job) (
+	   kubernetes:job_verb_code_instance:apiserver_requests:ratio_rate5m
+	      {code=3D~"5..",verb=3D~"GET|POST|DELETE|PATCH"}
+	  )
 ```
-
 Using above error ratios (and other similarly created kubernetes::job:apiserver_latency:pctl90rate5m one for recorded 90th percentile latency over the past 5mins, not shown above for simplicity),finally create a boolean metric to record our SLO complaince: 
 ```
 record: kubernetes::job:sl=
@@ -118,7 +117,7 @@ The above kubernetes::job:slo_kube_api_ok final metric is very useful for dash
 	for: 5m
 ```
 
-Note that the Prometheus rules are taken from the already manifested jsonnet output, which can be found in [our sources][bitnami-labs/kubernetes-grafana-dashboards] and the thresholds are evaluated from $.slo.error_ratio_threshold and $.slo.latency_threshold respectively.
+Note that the Prometheus rules are taken from the already manifested jsonnet output, and the thresholds are evaluated from $.slo.error_ratio_threshold and $.slo.latency_threshold respectively.
 
 ## Programmatically creating Grafana dashboards
 Creating Grafana dashboards is usually done by interacting with the UI. This is fine for simple and/or "standard" dashboards (as for example, downloaded from https://grafana.com/dashboards), but becomes cumbersome if you want to implement best devops practices, especially for gitops workflows. The community is addressing this issue via efforts, such as Grafana libraries for jsonnet, python, and Javascript. For jsonnet implementation with grafana you can use grafonnet-lib.
