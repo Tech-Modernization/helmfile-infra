@@ -3,14 +3,14 @@
 ## Overview
 SLO dashboards can be patterned after the implementation at dash-kubeapi.jsonnet.
 It follows the RED method (Requests Rate, Errors, Duration) and is a data-driven "Infrastructure as Code" approach which creates alerts and dashboards to support SLO dashboard/alerts for the Kubernetes API via Prometheus and Grafana.
-￼
+
 jsonnet is used to build our rules and dashboards files from jsonnet input files. 
 
 For kubeapi
 * spec-kubeapi.jsonnet: as much data-only specification as possible (thresholds, rules and dashboards formulas)
-** alerts-kubeapi.jsonnet: outputs Prometheus alerts
-** rules-kubeapi.jsonnet: outputs Prometheus recording rules
-** dash-kubeapi.jsonnet: outputs Grafana dashboards, using grafonnet-lib via our opinionated grafana.libsonnet
+ * alerts-kubeapi.jsonnet: outputs Prometheus alerts
+ * rules-kubeapi.jsonnet: outputs Prometheus recording rules
+ * dash-kubeapi.jsonnet: outputs Grafana dashboards, using grafonnet-lib via our opinionated grafana.libsonnet
 
 The resulting rules/alerts json can be converted to yaml and used directly to configure prometheus and grafana.
 
@@ -18,8 +18,8 @@ The resulting rules/alerts json can be converted to yaml and used directly to co
 Let's define a simple target:
 * SLO: 99%, from the following:
 * SLIs:
-** error ratio under 1%
-** latency under 200ms for 90th&nbsp;percentile of requests
+ * error ratio under 1%
+ * latency under 200ms for 90th&nbsp;percentile of requests
 
 Writing above spec as jsonnet
 
