@@ -1,0 +1,16 @@
+helm:
+  storageClass: standard
+  prometheus:
+   scrape_targets:
+     - myapp-prod.contino.io
+
+  registry: docker.io
+  imagePrefix: docker.io/
+  domain: contino.io
+  artifactPrefix: https://artifactory.contino.io/artifactory
+
+  prometheus-operator:
+    enabled: true
+
+  sonar:
+    pluginPrefix: https://binaries.sonarsource.com/Distribution/

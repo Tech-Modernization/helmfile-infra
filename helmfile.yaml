@@ -1,0 +1,116 @@
+#####################################################################
+# repositories
+###
+### default values to set for args along with dedicated keys that can
+### be set by contributers, cli args take precedence over these
+#####################################################################
+
+repositories:
+# The artifactory repository is a cache of the official charts located at gs://kubernetes-charts
+  - name: stable
+    url: https://kubernetes-charts.storage.googleapis.com
+#    url: https://artifactory.contino.io/artifactory/helm-charts
+#  - name: myapp 
+#    url: https://artifactory.contino.io/artifactory/myappa-helm
+
+#####################################################################
+# helmDefaults
+###
+### default values to set for args along with dedicated keys that can
+### be set by contributers, cli args take precedence over these
+#####################################################################
+
+helmDefaults:
+  verify: false
+  wait: false
+  timeout: 600
+  force: true
+  tls: false
+
+#####################################################################
+# releases
+###
+###  The desired states of Helm releases.
+###  Helmfile runs various helm commands to converge the current state
+###  in the live cluster to the desired state defined here.
+#####################################################################
+
+releases:
+
+{{ if eq .Environment.Name "gcp" }}
+ - name: prometheus-operator
+   namespace: prometheus
+   chart: stable/prometheus-operator
+   #version: 6.17.1
+   version: 8.12.1
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+{{ end }}
+
+ - name: myapp-prometheus-operator
+   namespace: myapp-prometheus
+   chart: stable/prometheus-operator
+   #version: 6.0.0
+   version: 8.12.1
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+#     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+#   hooks:
+#     - events: ["prepare"]
+#       showlogs: true
+#       command: "echo kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml"
+###     command: "kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml | kubectl apply -f -"
+#       #args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
+
+ - name: prometheus-pushgateway
+   namespace: prometheus
+   chart: stable/prometheus-pushgateway
+   #version: 1.2.2
+   version: 1.0.1
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+
+ - name: sonarqube
+   namespace: sonarqube 
+{{ if eq .Environment.Name "gcp" }}
+   chart: stable/sonarqube
+   version: 4.0.1
+{{ end }}
+{{ if ne .Environment.Name "gcp" }}
+   chart: acme/sonarqube
+   version: 4.0.1-1
+{{ end }}
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+
+#####################################################################
+# environments
+###
+###  The list of environments managed by helmfile.
+###
+#####################################################################
+
+environments:
+  default:
+  lprod:
+    values:
+    - environments/common/values.yaml
+    - environments/lprod/values.yaml
+    secrets:
+    - environments/lprod/secret.yaml
+  ldev:
+    values:
+    - environments/common/values.yaml
+    - environments/ldev/values.yaml
+    secrets:
+    - environments/ldev/secret.yaml
+  gcp:
+    values:
+    - environments/gcp/values.yaml
+    secrets:
+    - environments/gcp/secret.yaml

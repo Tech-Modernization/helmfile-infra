@@ -1,0 +1,7 @@
+helm:
+  storageClass: vsan-kubernetes
+  prometheus:
+   scrape_targets:
+     - myapp-dev.contino.io
+     - myapp-int.contino.io
+     - myapp-qa.contino.io

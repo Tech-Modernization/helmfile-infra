@@ -1,0 +1,11 @@
+helm:
+  registry: dockerhub.artifactory.contino.io
+  imagePrefix: dockerhub.artifactory.contino.io/
+  domain: contino.io
+  artifactPrefix: https://artifactory.contino.io/artifactory
+
+  prometheus-operator:
+    enabled: false
+
+  sonar:
+    pluginPrefix: https://artifactory.contino.io/artifactory/sonar-plugins

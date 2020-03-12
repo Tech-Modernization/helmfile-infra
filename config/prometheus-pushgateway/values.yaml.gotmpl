@@ -1,0 +1,9 @@
+serviceMonitor:
+  enabled: true
+  namespace: prometheus
+image:
+  repository:  {{ .Environment.Values.helm.imagePrefix }}prom/pushgateway
+ingress:
+  enabled: true
+  hosts:
+  - pushgateway-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}

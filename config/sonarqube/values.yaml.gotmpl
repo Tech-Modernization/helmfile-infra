@@ -1,0 +1,56 @@
+image:
+  repository: {{ .Environment.Values.helm.imagePrefix }}sonarqube
+initContainerImage: {{ .Environment.Values.helm.imagePrefix }}busybox:1.31
+ingress:
+  enabled: true
+  hosts:
+    - name: sonar-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20M"
+persistence:
+  enabled: true
+  storageClass: {{ .Environment.Values.helm.storageClass }}
+  size: 10Gi
+plugins:
+  initContainerImage: {{ .Environment.Values.helm.imagePrefix }}alpine:3.10.3
+  install:
+##     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-dependency-check-plugin/sonar-dependency-check-plugin-2.0.2.jar
+##     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-yaml-plugin/sonar-yaml-plugin-1.5.1.jar
+     - https://github.com/dependency-check/dependency-check-sonar-plugin/releases/download/2.0.3/sonar-dependency-check-plugin-2.0.3.jar
+     - https://github.com/sbaudoin/sonar-yaml/releases/download/v1.5.1/sonar-yaml-plugin-1.5.1.jar
+     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-ldap-plugin/sonar-ldap-plugin-2.2-SNAPSHOT.jar
+     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-typescript-plugin/sonar-typescript-plugin-2.1.0.4359.jar
+     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-java-plugin/sonar-java-plugin-6.1.0.20866.jar
+     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-javascript-plugin/sonar-javascript-plugin-6.2.0.12043.jar
+     - {{ .Environment.Values.helm.sonar.pluginPrefix }}/sonar-xml-plugin/sonar-xml-plugin-2.0.1.2020.jar
+
+#sonarProperties:
+#  sonar.forceAuthentication: true
+#  ldap.realm: contino.io
+#  sonar.security.realm: LDAP
+#  sonar.authenticator.createUsers: true
+#  sonar.security.savePassword: true
+#  sonar.security.updateUserAttributes: true
+#  ldap.url: ldap://ldap.contino.io:3268
+#  ldap.bindDn: svc_TUSAldap
+#  ldap.bindPassword: TODO_BIND_PASSWORD
+#  ldap.user.request: (&(objectClass=user)(sAMAccountName={login}))
+#  ldap.user.realNameAttribute: cn
+#  ldap.user.emailAttribute: mail
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+
+postgresql:
+{{- if .Environment.Values.helm.registry }}
+  image:
+    registry: {{ .Environment.Values.helm.registry }}
+  volumePermissions:
+    image:
+      registry: {{ .Environment.Values.helm.registry }}
+  prometheusRule:
+    image:
+      registry: {{ .Environment.Values.helm.registry }}
+{{- end }}

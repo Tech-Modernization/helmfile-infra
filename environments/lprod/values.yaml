@@ -1,0 +1,5 @@
+helm:
+  storageClass: vsan-default 
+  prometheus:
+   scrape_targets:
+     - myapp-prod.contino.io

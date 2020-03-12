@@ -1,0 +1,143 @@
+#prometheusOperator:
+#  admissionWebhooks:
+#    enbabled: false
+
+coreDns:
+  enabled: false
+
+alertmanager:
+  ingress:
+    enabled: true
+    hosts:
+      - alertmanager-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+  alertmanagerSpec:
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Environment.Values.helm.storageClass }}
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 50Gi
+
+  ## Alertmanager configuration directives
+  ## ref: https://prometheus.io/docs/alerting/configuration/#configuration-file
+  ##      https://prometheus.io/webtools/alerting/routing-tree-editor/
+  ##
+  config:
+    global:
+      resolve_timeout: 5m
+      http_config: {}
+      smtp_hello: localhost
+      smtp_require_tls: true
+      pagerduty_url: https://events.pagerduty.com/v2/enqueue
+      opsgenie_api_url: https://api.opsgenie.com/
+      wechat_api_url: https://qyapi.weixin.qq.com/cgi-bin/
+      victorops_api_url: https://alert.victorops.com/integrations/generic/20131114/alert/
+    route:
+      group_by: ['job']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: chat-dev
+      #receiver: team-email-support
+      routes:
+#      - receiver: team-email-support
+#        group_by:
+#        - alertname
+#        - instance
+#        match_re:
+#          profile: ^(?:^(dev|int|qa|stage|prod)$)$
+#          severity: ^(?:(CRITICAL))$
+#        continue: true
+      - receiver: chat-dev
+        group_by:
+        - alertname
+        - profile
+        - severity
+        match_re:
+          profile: ^(?:(dev))$
+          severity: ^(?:^(INFO|WARNING|CRITICAL)$)$
+        continue: true
+      - receiver: chat-int
+        group_by:
+        - alertname
+        - profile
+        - severity
+        match_re:
+          profile: ^(?:(int))$
+          severity: ^(?:^(INFO|WARNING|CRITICAL)$)$
+        continue: true
+      - receiver: chat-qa
+        group_by:
+        - alertname
+        - profile
+        - severity
+        match_re:
+          profile: ^(?:(qa))$
+          severity: ^(?:^(INFO|WARNING|CRITICAL)$)$
+        continue: true
+        continue: true
+      - receiver: chat-stage
+        group_by:
+        - alertname
+        - profile
+        - severity
+        match_re:
+          profile: ^(?:(stage))$
+          severity: ^(?:^(INFO|WARNING|CRITICAL)$)$
+        continue: true
+      - receiver: chat-prod
+        group_by:
+        - alertname
+        - profile
+        - severity
+        match_re:
+          profile: ^(?:(prod))$
+          severity: ^(?:^(INFO|WARNING|CRITICAL)$)$
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 5m
+    receivers:
+
+    - name: chat-dev
+      webhook_configs:
+        - url: "http://calert.calert.svc.cluster.local:6000/create?room_name=myapp-DEV-Environment"
+          send_resolved: true
+    - name: chat-int
+      webhook_configs:
+        - url: "http://calert.calert.svc.cluster.local:6000/create?room_name=myapp-INT-Environment"
+          send_resolved: true
+    - name: chat-qa
+      webhook_configs:
+        - url: "http://calert.calert.svc.cluster.local:6000/create?room_name=myapp-QA-Environment"
+          send_resolved: true
+    - name: chat-stage
+      webhook_configs:
+        - url: "http://calert.calert.svc.cluster.local:6000/create?room_name=myapp-STAGE-Environment"
+          send_resolved: true
+    - name: chat-prod
+      webhook_configs:
+        - url: "http://calert.calert.svc.cluster.local:6000/create?room_name=myapp-PROD-Environment"
+          send_resolved: true
+
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: {{ .Environment.Values.helm.storageClass }}
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 100Gi
+
+grafana:
+  ingress:
+    enabled: true
+    hosts:
+      - grafana-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
