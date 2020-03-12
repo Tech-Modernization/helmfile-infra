@@ -3,3 +3,4 @@
 *.lock
 secret.yaml.dec
 .sops.yaml
+generated/

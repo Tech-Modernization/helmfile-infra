@@ -25,6 +25,8 @@ version.BuildInfo{Version:"v3.0.1", GitCommit:"7c22ef9ce89e0ebeb7125ba2ebf7d421f
 # helmfile --version
 helmfile version v0.100.2
 # helm plugin install https://github.com/databus23/helm-diff 
+# brew install jsonnet
+# pip install pyyml (python2)
 '''
 
 for secrets
@@ -178,7 +180,6 @@ docker push dockerhub.artifactory.{{domain}}/grafana/grafana:6.6.2-1
 docker run -d -p 3000:3000 --name=grafana dockerhub.artifactory.{{domain}}/grafana/grafana:6.6.2-1
 ```
 
-
 ### extra (secret) files
 Some extra files are needed for configuration that include secrets which should not be checked into source control (git or bitbucket).
 
@@ -192,6 +193,12 @@ In vk8 environments, the alertmanager and prometheus operator are install and op
 Alertmanager includes ***receiver*** configuration for gchat-notify (using calert) and ***route*** configuration for targeting specific receivers has on alert labels.  ***severity*** and ***profile*** (environment) labels are used to target specific rooms.  Also, alert annotations description, message, runbook_url and link are used customize notification messages.
 
 The myapp-prometheus-operator standard alerts includes ***PrometheusNotConnectedToAlertmanagers*** which should be manually disabled for now (or configure for Blackhole).  Future helm chart version could be used to eliminated this alert when  the alertmanager is not included in the release and/or modified to match the tags of the configured shared alertmanager.
+
+### SLO dashboard as code jsonnet
+SLO dashboards are generated using jsonnet using a IaC approach.  
+helmfile hooks trigger generation of prometheus rules, prometheus alerts, and grafana dashboards for **kubeapi** and **myappapi** specs, and these are deployed to prometheus.
+A standardized RED method (Request Rate, Errors, Duration) using a data-driven IaC approach based on https://github.com/bitnami-labs/kubernetes-grafana-dashboards
+See [JSONNET] for more info
 
 ## Sonarqube
 SonarQube is an open-source continous code inspection tools which empowers developers to write cleaner and safer code.
@@ -279,12 +286,12 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 
 ## TODO
 - [x] secrets other than pgp (vault)
+- [x] integrated json net
 - [ ] GCP ingress/DNS
 - [ ] GCP terraform to create GKE cluster, tenant, staticip, etc
 - [ ] LDAP/AD integration (or front-end it with oauth2-proxy and do SSO)
 - [ ] sonarqube rules/qualityprofile/qualitygate as code (backup/restore?)e
 - [ ] sonarqube monitoring (dashboard/alert)
-- [ ] integrated json net
 - [ ] helmfile hooks to create ns, etc
-- [ ] helmfile-operator https://github.com/fluxcd/helm-operator (or JenkinsFile)
+- [ ] helmfile-operator and/or fluxcd helm-operator  https://github.com/fluxcd/helm-operator (or JenkinsFile)
 - [ ] triggers for resources/extra.sh and load.sh

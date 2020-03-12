@@ -1,0 +1,5 @@
+additionalPrometheusRules:
+  - name: myappapi
+{{ readFile "generated/alerts-myappapi.jsonnet.yaml" | indent 4}}
+{{ readFile "generated/rules-myappapi.jsonnet.yaml" | replace "groups:" "" | indent 4}}
+

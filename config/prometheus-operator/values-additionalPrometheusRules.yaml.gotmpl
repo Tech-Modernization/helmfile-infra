@@ -1,0 +1,5 @@
+additionalPrometheusRules:
+  - name: kubeapi
+{{ readFile "generated/alerts-kubeapi.jsonnet.yaml" | indent 4}}
+{{ readFile "generated/rules-kubeapi.jsonnet.yaml" | replace "groups:" "" | indent 4}}
+
