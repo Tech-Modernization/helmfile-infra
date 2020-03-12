@@ -8,9 +8,12 @@ is driven by files in git such as changes to yaml values files.
 
 Prometheus Operator and Sonarqube are deployed, but as more kubernetes helm charts are used this list will grow.
 
-Environements focused on are **ldev** for local k8s lower environments and **lprod** for local higher environments.  
-Additional environments include **gcp** , and additional kubernetes cluster including on-prem Anthos, Azure, AWS and others can be 
-accommodated with minimal effort.
+Environements
+* **ldev** for local k8s lower environments
+* **lprod** for local higher environments  
+* **gcp** gke on google cloud
+
+Additional kubernetes cluster including on-prem Anthos, Azure, AWS and others can be accommodated with minimal effort.
 
 ## Prerequisites (mac)
 
@@ -283,5 +286,5 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 - [ ] sonarqube monitoring (dashboard/alert)
 - [ ] integrated json net
 - [ ] helmfile hooks to create ns, etc
-- [ ] helmfile-operator (or JenkinsFile)
+- [ ] helmfile-operator https://github.com/fluxcd/helm-operator (or JenkinsFile)
 - [ ] triggers for resources/extra.sh and load.sh
