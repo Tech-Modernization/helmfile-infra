@@ -228,9 +228,11 @@ These charts use serviceaccounts and namespaces created by the cluster administr
 
 For gcp, the cluster, service accounts, and namespaces must be setup outside of this helmfile project 
 ```
+kubectl create ns nginx
 kubectl create ns prometheus
 kubectl create ns sonarqube
 kubectl create ns myapp-prometheus
+kubectl create ns devops
 ```
 Also, compute static IP and DNS records to support Ingress must also be done 
 * https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip
@@ -287,8 +289,10 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 ## TODO
 - [x] secrets other than pgp (vault)
 - [x] integrated json net
-- [ ] GCP ingress/DNS
-- [ ] GCP terraform to create GKE cluster, tenant, staticip, etc
+- [x] ingress
+- [ ] DNS
+- [ ] cert-manager
+- [ ] k8s_setup with terraform to create GKE cluster, tenant, staticip, etc
 - [ ] LDAP/AD integration (or front-end it with oauth2-proxy and do SSO)
 - [ ] sonarqube rules/qualityprofile/qualitygate as code (backup/restore?)e
 - [ ] sonarqube monitoring (dashboard/alert)

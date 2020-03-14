@@ -88,7 +88,9 @@ grafana:
   ingress:
     enabled: true
     hosts:
-      - myapp-grafana-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+      - myapp-grafana.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+    annotations:
+      kubernetes.io/ingress.class: nginx
   image:
     #repository: {{ .Environment.Values.helm.imagePrefix }}myapp-grafana/grafana
     #tag: 6.6.2-1
@@ -106,7 +108,9 @@ prometheus:
   ingress:
     enabled: true
     hosts:
-      - myapp-prometheus-{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+      - myapp-prometheus.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+    annotations:
+      kubernetes.io/ingress.class: nginx
   prometheusSpec:
     externalLabels:
       cluster: {{ .Environment.Name }}

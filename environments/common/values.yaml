@@ -3,6 +3,8 @@ helm:
   imagePrefix: dockerhub.artifactory.contino.io/
   domain: contino.io
   artifactPrefix: https://artifactory.contino.io/artifactory
+  issuer: letsencrypt-staging
+  #issuer: letsencrypt-production
 
   prometheus-operator:
     enabled: false

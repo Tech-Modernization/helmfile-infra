@@ -1,0 +1,164 @@
+controller:
+  name: controller
+  image:
+    repository: {{ .Environment.Values.nginx_ingress.controller.image.repository }}
+    tag: {{ .Environment.Values.nginx_ingress.controller.image.tag | quote }}
+    pullPolicy: IfNotPresent
+    # www-data -> uid 33
+    runAsUser: 33
+    allowPrivilegeEscalation: true
+  containerPort:
+    http: 80
+    https: 443
+  config: {
+    # use-forwarded-headers: "true"
+  }
+  headers: {}
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
+  daemonset:
+    useHostPort: true
+    hostPorts:
+      http: 80
+      https: 443
+      ## healthz endpoint
+      stats: 18080
+  defaultBackendService: ""
+  electionID: ingress-controller-leader
+  ingressClass: nginx
+  podLabels: {}
+  podSecurityContext: {}
+  publishService:
+    enabled: false
+    pathOverride: ""
+  scope:
+    enabled: false
+    namespace: ""   # defaults to .Release.Namespace
+  extraArgs: {}
+  extraEnvs: []
+  kind: Deployment
+  updateStrategy: {}
+  minReadySeconds: 0
+  tolerations: []
+  affinity: {}
+  nodeSelector: {}
+  livenessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    port: 10254
+  readinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+    port: 10254
+  podAnnotations: {}
+  replicaCount: {{ .Environment.Values.nginx_ingress.controller.replicaCount }}
+  minAvailable: {{ .Environment.Values.nginx_ingress.controller.minAvailable }}
+  resources: {}
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPUUtilizationPercentage: 50
+    targetMemoryUtilizationPercentage: 50
+  customTemplate:
+    configMapName: ""
+    configMapKey: ""
+  service:
+    annotations: {}
+    labels: {}
+    omitClusterIP: false
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    enableHttp: true
+    enableHttps: true
+    externalTrafficPolicy: ""
+    healthCheckNodePort: 0
+    targetPorts:
+      http: http
+      https: https
+    type: LoadBalancer
+    nodePorts:
+      http: ""
+      https: ""
+  extraContainers: []
+  extraVolumeMounts: []
+  extraVolumes: []
+  extraInitContainers: []
+  stats:
+    enabled: false
+    service:
+      annotations: {}
+      omitClusterIP: false
+      clusterIP: ""
+      externalIPs: []
+      loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      servicePort: 18080
+      type: ClusterIP
+  metrics:
+    enabled: false
+    service:
+      annotations: {}
+      # prometheus.io/scrape: "true"
+      # prometheus.io/port: "10254"
+      omitClusterIP: false
+      clusterIP: ""
+      externalIPs: []
+      loadBalancerIP: ""
+      loadBalancerSourceRanges: []
+      servicePort: 9913
+      type: ClusterIP
+    serviceMonitor:
+      enabled: false
+      additionalLabels: {}
+      namespace: ""
+      # honorLabels: true
+  lifecycle: {}
+  priorityClassName: ""
+revisionHistoryLimit: 10
+defaultBackend:
+  enabled: true
+  name: default-backend
+  image:
+    repository: {{ .Environment.Values.nginx_ingress.defaultBackend.image.repository }}
+    tag: {{ .Environment.Values.nginx_ingress.defaultBackend.image.tag | quote }}
+    pullPolicy: IfNotPresent
+  extraArgs: {}
+  port: 8080
+  tolerations: []
+  affinity: {}
+  podLabels: {}
+  nodeSelector: {}
+  podAnnotations: {}
+  replicaCount: 1
+  minAvailable: 1
+  resources: {}
+  service:
+    annotations: {}
+    omitClusterIP: false
+    clusterIP: ""
+    externalIPs: []
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    servicePort: 80
+    type: ClusterIP
+  priorityClassName: ""
+podSecurityPolicy:
+  enabled: false
+serviceAccount:
+  create: true
+  name:
+imagePullSecrets: []
+tcp:
+{{- range $key, $val := .Environment.Values.nginx_ingress.tcp }}
+  {{ $key }}: {{ $val }}
+{{- end  }}
+udp: {}

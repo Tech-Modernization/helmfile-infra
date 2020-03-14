@@ -6,8 +6,10 @@ helm:
 
   registry: docker.io
   imagePrefix: docker.io/
-  domain: contino.io
-  artifactPrefix: https://artifactory.contino.io/artifactory
+  domain: allaboutthatbassstudios.com
+  artifactPrefix: https://artifactory.gcp.chickenkiller.com/artifactory
+  #issuer: letsencrypt-production
+  issuer: letsencrypt-staging
 
   prometheus-operator:
     enabled: true

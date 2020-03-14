@@ -1,15 +1,4 @@
-prometheus:
-  ingress:
-    enabled: false
-#limit of 8 dynamic IP
-#  service:
-#    type: LoadBalancer
-
 grafana:
-  ingress:
-    enabled: false
-  service:
-    type: LoadBalancer
   image:
     repository: {{ .Environment.Values.helm.imagePrefix }}grafana/grafana
     tag: 6.6.2

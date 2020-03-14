@@ -4,27 +4,7 @@
 #  admissionWebhooks:
 #    enabled: false
 
-alertmanager:
-  ingress:
-    enabled: false
-#    annotations:
-#      kubernetes.io/ingress.global-static-ip-name: helmfile-infra-ip
-  service:
-#    type: NodePort
-    type: LoadBalancer
-
-prometheus:
-  ingress:
-    enabled: false
-  service:
-    type: LoadBalancer
-
 grafana:
-  ingress:
-    enabled: false
-  service:
-    type: LoadBalancer
-
   ## Configure additional grafana datasources
   ## ref: http://docs.grafana.org/administration/provisioning/#datasources
   additionalDataSources:
