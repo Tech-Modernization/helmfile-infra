@@ -8,6 +8,13 @@ ingress:
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "20M"
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  tls:
+  - secretName: sonar-{{ .Environment.Name }}-tls
+    hosts:
+      - sonar.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+
 persistence:
   enabled: true
   storageClass: {{ .Environment.Values.helm.storageClass }}

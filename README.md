@@ -6,8 +6,44 @@ Helmfile is being used to declaratively manage the configuration and deployment 
 Helmfile is like helm for helm.  It allows a gitflow approach to using helm chart releases, where the release configuration customization
 is driven by files in git such as changes to yaml values files.
 
-Prometheus Operator and Sonarqube are deployed, but as more kubernetes helm charts are used this list will grow.
+Charts
+* nginx-ingress
+* cert-manager
+* prometheus-operator
+* myapp-prometheus-operator
+* prometheus-pushgateway
+* jenkins
+* jira
+* confluence
+* gitlab-ce
+* sonarqube
 
+#####################################################################
+# environments
+###
+###  The list of environments managed by helmfile.
+###
+#####################################################################
+
+environments:
+  default:
+  lprod:
+    values:
+    - environments/common/values.yaml
+    - environments/lprod/values.yaml
+    secrets:
+    - environments/lprod/secret.yaml
+  ldev:
+    values:
+    - environments/common/values.yaml
+    - environments/ldev/values.yaml
+    secrets:
+    - environments/ldev/secret.yaml
+  gcp:
+    values:
+    - environments/gcp/values.yaml
+    secrets:
+    - environments/gcp/secret.yaml
 Environements
 * **ldev** for local k8s lower environments
 * **lprod** for local higher environments  
@@ -290,8 +326,8 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 - [x] secrets other than pgp (vault)
 - [x] integrated json net
 - [x] ingress
-- [ ] DNS
-- [ ] cert-manager
+- [x] cert-manager
+- [ ] externalDNS
 - [ ] k8s_setup with terraform to create GKE cluster, tenant, staticip, etc
 - [ ] LDAP/AD integration (or front-end it with oauth2-proxy and do SSO)
 - [ ] sonarqube rules/qualityprofile/qualitygate as code (backup/restore?)e

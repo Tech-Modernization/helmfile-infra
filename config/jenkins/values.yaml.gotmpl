@@ -6,3 +6,9 @@ master:
       - jenkins.{{.Environment.Name}}.{{ .Environment.Values.helm.domain }}
     annotations:
       kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+    - secretName: jenkins-{{ .Environment.Name }}-tls
+      hosts:
+        - jenkins.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}

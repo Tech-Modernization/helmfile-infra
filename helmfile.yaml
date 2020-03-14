@@ -45,10 +45,10 @@ releases:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
-# - name: cert-manager
-#   namespace: cert-manager
-#   chart: jetstack/cert-manager
-#   version: 0.12.0
+ - name: cert-manager
+   namespace: cert-manager
+   chart: jetstack/cert-manager
+   version: 0.14.0
 
 {{ if eq .Environment.Name "gcp" }}
  - name: prometheus-operator

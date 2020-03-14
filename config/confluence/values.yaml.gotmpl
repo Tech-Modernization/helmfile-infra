@@ -1,9 +1,15 @@
 ingress:
   enabled: true
   hosts:
-    - confluence.{{.Environment.Name}}.{{ .Environment.Values.helm.domain }}
+    - confluence.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  tls:
+  - secretName: confluence-{{ .Environment.Name}}-tls
+    hosts:
+      - confluence{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
 confluence:
   reverseProxyHost: confluence.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
 resources:

@@ -91,6 +91,12 @@ grafana:
       - myapp-grafana.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
     annotations:
       kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+    - secretName: myapp-grafana-{{ .Environment.Name }}-tls
+      hosts:
+        - myapp-grafana.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
   image:
     #repository: {{ .Environment.Values.helm.imagePrefix }}myapp-grafana/grafana
     #tag: 6.6.2-1
@@ -111,6 +117,13 @@ prometheus:
       - myapp-prometheus.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
     annotations:
       kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    tls:
+    - secretName: myapp-prometheus-{{ .Environment.Name }}-tls
+      hosts:
+        - myapp-prometheus.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+
   prometheusSpec:
     externalLabels:
       cluster: {{ .Environment.Name }}
