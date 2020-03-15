@@ -19,9 +19,9 @@ is driven by files in git such as changes to yaml values files.
 * sonarqube
 
 ## Environements
-* **ldev** for local k8s lower environments
-* **lprod** for local higher environments  
 * **gcp** gke on google cloud
+* **ldev** airgap local k8s lower environmentss
+* **lprod** airgap local higher environments  
 
 Additional kubernetes cluster including on-prem Anthos, Azure, AWS and others can be accommodated with minimal effort.
 
@@ -119,10 +119,12 @@ hangouts_private_key: "-----BEGIN PRIVATE KEY-----\nTODO_REALKEYHERE\nCXDGE8o2B2
 * ./secret.sh
 * git add /environment/XXX/secret.yaml and commit/push
 * in values.yaml.gotmpl use secrets:
- - {{ .Environment.Values.elasticsearch_svc_grafana_password }}
- - {{ .Environment.Values.stackdriver_privateKey }}
- - {{ .Environment.Values.hangouts_private_key }}
- - {{ .Environment.Values.grafana_adminPassword }}
+```
+{{ .Environment.Values.elasticsearch_svc_grafana_password }}
+{{ .Environment.Values.stackdriver_privateKey }}
+{{ .Environment.Values.hangouts_private_key }}
+{{ .Environment.Values.grafana_adminPassword }}
+```
 
 ## Prometheus Operator and PushGateway 
 
