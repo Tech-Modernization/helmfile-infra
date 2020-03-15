@@ -9,3 +9,9 @@ variable "project" {
   description = "Project were resources are managed"
   default     = "bhood-214523"
 }
+
+variable "cluster_name" {
+  type        = string
+  description = "Project were resources are managed"
+  default     = "gcp"
+}

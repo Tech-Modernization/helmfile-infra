@@ -1,15 +1,10 @@
-Letsencrypt
-https://medium.com/bluekiri/deploy-a-nginx-ingress-and-a-certitificate-manager-controller-on-gke-using-helm-3-8e2802b979ec
+# gcp/gke env setup for helmfile-infra
 
-kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.12/deploy/manifests/00-crds.yaml
-kubectl create namespace cert-manager
-kubectl apply -f issuer.yaml
-
-https://medium.com/@maninder.bindra/auto-provisioning-of-letsencrypt-tls-certificates-for-kubernetes-services-deployed-to-an-aks-52fd437b06b0
-
-The kind of Issuer and the name of the Issuer should match the values mentioned in the ingressShim.extraArgs (of the cert-manager helm installation command). cert-manager uses the ACME protocol to verify ownership of the domain before getting certificates from Letsencrypt. In the yaml above we have provided the url of the production Letsencrypt ACME server. The staging url of the Letsencrypt ACME server is https://acme-staging.api.letsencrypt.org/directory . You can find more detail on these settings at the linkkkkkjkk
-
-https://cert-manager.readthedocs.io/en/latest/tutorials/acme/http-validation.html
+```
+terraform init
+terrafomr plan
+terrafomr apply
+```
 
 
 https://certbot.eff.org/docs/using.html#manual
@@ -81,13 +76,6 @@ gcloud compute firewall-rules create "allow-apiserver-to-admission-webhook-8443"
       --description="Allow apiserver access to admission webhook pod on port 8443" \
       --direction INGRESS
 
-
-
-gcloud container clusters get-credentials acme --zone us-central1-c --project bhood-214523
-
-kubectl create ns prometheus
-kubectl create ns cwow-sonarqube
-kubectl create ns cwow-prometheus
 
 
 https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip

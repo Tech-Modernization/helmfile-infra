@@ -4,3 +4,6 @@
 secret.yaml.dec
 .sops.yaml
 generated/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
