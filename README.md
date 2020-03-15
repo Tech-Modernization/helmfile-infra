@@ -37,16 +37,12 @@ helmfile version v0.100.2
 # helm plugin install https://github.com/databus23/helm-diff 
 # brew install jsonnet
 # pip install pyyml (python2)
-```
-
-optional
-```bash
 # brew install stern
 # brew install kubectx
 ```
 
 for secrets
-'''
+```bash
 # brew install sops
 # helm plugin install https://github.com/futuresimple/helm-secrets 
 # brew install gnu-getopt
