@@ -6,7 +6,7 @@ Helmfile is being used to declaratively manage the configuration and deployment 
 Helmfile is like helm for helm.  It allows a gitflow approach to using helm chart releases, where the release configuration customization
 is driven by files in git such as changes to yaml values files.
 
-Charts
+## Charts
 * nginx-ingress
 * cert-manager
 * prometheus-operator
@@ -18,33 +18,7 @@ Charts
 * gitlab-ce
 * sonarqube
 
-#####################################################################
-# environments
-###
-###  The list of environments managed by helmfile.
-###
-#####################################################################
-
-environments:
-  default:
-  lprod:
-    values:
-    - environments/common/values.yaml
-    - environments/lprod/values.yaml
-    secrets:
-    - environments/lprod/secret.yaml
-  ldev:
-    values:
-    - environments/common/values.yaml
-    - environments/ldev/values.yaml
-    secrets:
-    - environments/ldev/secret.yaml
-  gcp:
-    values:
-    - environments/gcp/values.yaml
-    secrets:
-    - environments/gcp/secret.yaml
-Environements
+## Environements
 * **ldev** for local k8s lower environments
 * **lprod** for local higher environments  
 * **gcp** gke on google cloud
@@ -63,7 +37,13 @@ helmfile version v0.100.2
 # helm plugin install https://github.com/databus23/helm-diff 
 # brew install jsonnet
 # pip install pyyml (python2)
-'''
+```
+
+optional
+```bash
+# brew install stern
+# brew install kubectx
+```
 
 for secrets
 '''
