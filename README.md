@@ -39,43 +39,9 @@ helmfile version v0.100.2
 # pip install pyyml (python2)
 # brew install stern
 # brew install kubectx
-```
-
-for secrets
-```bash
 # brew install sops
 # helm plugin install https://github.com/futuresimple/helm-secrets 
 # brew install gnu-getopt
-Download and install GPG: https://releases.gpgtools.org/GPG_Suite-2019.2.dmg
-Generate and upload key
-```
-
-## Secret (NOT CHECKED IN)
-
-.sops.yaml
-```
-creation_rules:
-        # Encrypt with AWS KMS
-        #- kms: 'arn:aws:kms:us-east-1:222222222222:key/111b1c11-1c11-1fd1-aa11-a1c1a1sa1dsl1+arn:aws:iam::222222222222:role/helm_secrets'
-
-        # Encrypt using GCP KMS
-        #- gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
-
-        # As failover encrypt with PGP
-        - pgp: 'TODO_XXXXXXXX'
-        # For more help look at https://github.com/mozilla/sops
-```
-secret.yaml.dec
-```
-grafana_adminPassword: TODO_prom-operator
-elasticsearch_svc_grafana_password: TODO_RXgXXXXXXx
-stackdriver_privateKey: |
-      -----BEGIN PRIVATE KEY-----
-      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCwshHZBbbax4Ho
-      TODO_REALKEYHERE
-      EUOLCkhgv8ukISVqlQ3oyuU=
-      -----END PRIVATE KEY-----
-hangouts_private_key: "-----BEGIN PRIVATE KEY-----\nTODO_REALKEYHERE\nCXDGE8o2B2lYXy3jGBWacQ==\n-----END PRIVATE KEY-----\n"
 ```
 
 ## kube credentials
@@ -123,11 +89,36 @@ To apply the changes without doing a diff or decision gate:
 
 ## Secret setup
 * https://github.com/roboll/helmfile#environment-secrets
+* Download and install GPG: https://releases.gpgtools.org/GPG_Suite-2019.2.dmg
+* Generate and upload key
 * create .sops.yaml DO NOT CHECK IN 
+```
+creation_rules:
+        # Encrypt with AWS KMS
+        #- kms: 'arn:aws:kms:us-east-1:222222222222:key/111b1c11-1c11-1fd1-aa11-a1c1a1sa1dsl1+arn:aws:iam::222222222222:role/helm_secrets'
+
+        # Encrypt using GCP KMS
+        #- gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
+
+        # As failover encrypt with PGP
+        - pgp: 'TODO_XXXXXXXX'
+        # For more help look at https://github.com/mozilla/sops
+```
 * create secret.yaml.dec (could differ by env) with secrets DO NOT CHECK IN
+```
+grafana_adminPassword: TODO_prom-operator
+elasticsearch_svc_grafana_password: TODO_RXgXXXXXXx
+stackdriver_privateKey: |
+      -----BEGIN PRIVATE KEY-----
+      MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCwshHZBbbax4Ho
+      TODO_REALKEYHERE
+      EUOLCkhgv8ukISVqlQ3oyuU=
+      -----END PRIVATE KEY-----
+hangouts_private_key: "-----BEGIN PRIVATE KEY-----\nTODO_REALKEYHERE\nCXDGE8o2B2lYXy3jGBWacQ==\n-----END PRIVATE KEY-----\n"
+```
 * ./secret.sh
 * git add /environment/XXX/secret.yaml and commit/push
-* if values.yaml.gotmpl use secrets:
+* in values.yaml.gotmpl use secrets:
  - {{ .Environment.Values.elasticsearch_svc_grafana_password }}
  - {{ .Environment.Values.stackdriver_privateKey }}
  - {{ .Environment.Values.hangouts_private_key }}
