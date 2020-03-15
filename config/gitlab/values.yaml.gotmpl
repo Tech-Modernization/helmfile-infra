@@ -1,21 +1,34 @@
-ingress:
-  enabled: true
-  url: gitlab.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+global:
+  hosts:
+    domain: {{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+    #externalIP=10.10.10.10
+    #certmanager-issuer.email=me@example.com
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    configureCertmanager: false
+    tls.secretName: gitlab-{{ .Environment.Name }}-tls
+
+# stable/gitlab-ce
+#ingress:
+#  enabled: true
+#  url: gitlab.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+#    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+#    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 #  tls:
 #  - secretName: gitlab-{{ .Environment.Name }}-tls
 #    hosts:
 #      - gitlab.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
-
-externalUrl: https://gitlab.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
-gitlabRootPassword: {{ .Environment.Values.grafana_adminPassword }}
-serviceType: NodePort
-
-resources:
-  limits:
-    memory: 2Gi
-  requests:
-    memory: 2Gi
+#
+#externalUrl: https://gitlab.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+#gitlabRootPassword: {{ .Environment.Values.grafana_adminPassword }}
+#serviceType: NodePort
+#resources:
+#  limits:
+#    memory: 2Gi
+#  requests:
+#    memory: 2Gi
