@@ -74,17 +74,17 @@ grafana:
       provider: gcs
     external_image_storage.gcs:
       key_file: /tmp/extra/cloudfunctionsforintegrations-9e9beac9534f.json
-#      key_file: /tmp/extra/hangouts-chat-jira-f1ee9a27869c.json
       bucket: {{ .Environment.Name }}
     log:
       level: debug
       filters: external_image_storage:debug
       filters: rendering:debug
-  extraConfigmapMounts:
-    - name: extra-configmap
-      mountPath: /tmp/extra
-      configMap: extra-configmap
-      readOnly: true
+### inject jot file to allow images to go to gcs bucket
+#  extraConfigmapMounts:
+#    - name: extra-configmap
+#      mountPath: /tmp/extra
+#      configMap: extra-configmap
+#      readOnly: true
   ingress:
     enabled: true
     hosts:
