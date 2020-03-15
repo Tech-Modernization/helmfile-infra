@@ -131,6 +131,7 @@ resource "null_resource" "import" {
   provisioner "local-exec" {
     command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${var.location} --project ${var.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml"
   }
+  depends_on = [google_container_node_pool.node-pool-1]
 }
 
 output "get-creds" {
