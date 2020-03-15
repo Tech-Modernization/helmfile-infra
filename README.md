@@ -293,6 +293,8 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 ## Refs
 - https://github.com/roboll/helmfile
 - https://www.reddit.com/r/devops/comments/awy81c/managing_helm_releases_terraform_helmsman/
+- https://docs.cloudposse.com/tools/helmfile/
+- https://medium.com/@naseem_60378/helmfile-its-like-a-helm-for-your-helm-74a908581599
 
 ## TODO
 - [x] secrets other than pgp (vault)
