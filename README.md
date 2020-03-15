@@ -290,6 +290,9 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
     --rules tcp :8443 \
     --target-tags gke-acme-f12e5ab7-node
 ```
+## Refs
+- https://github.com/roboll/helmfile
+- https://www.reddit.com/r/devops/comments/awy81c/managing_helm_releases_terraform_helmsman/
 
 ## TODO
 - [x] secrets other than pgp (vault)
