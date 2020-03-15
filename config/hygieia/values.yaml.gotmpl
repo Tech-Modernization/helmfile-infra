@@ -1,0 +1,104 @@
+image:
+  repository: capitalone/hygieia-ui
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: hygieia.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+  tls:
+    - secretName: hygieia-{{ .Environment.Name }}-tls
+      hosts:
+        - hygieia.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+
+image:
+  repository: capitalone/hygieia-ui
+  #repository: bitnami/node
+  #repository: cprimedevops/hygieia-ui
+  #repository: capitalone/hygieia-ui
+  #repository: contino/hygieia-ui
+  #tag: latest
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - hygieia-api
+
+
+#  repository: cprimedevops/hygieia-api
+#  ports:
+#  - "8080:8080"
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - mongodb:mongo
+
+## Enable to download app from external git repository.
+## Disable it if your docker image already includes your application at /app
+getAppFromExternalRepository: false
+
+#applicationPort: 3000
+
+#extraEnv: {}
+
+mongodb:
+  mongodbUsername: user
+  mongodbDatabase: test_db
+  mongodbPassword: secret_password
+
+#  image: cprimedevops/mongodb:latest
+#  container_name: mongodb
+#  command: mongod --smallfiles
+#  ports:
+#   - "27017:27017"
+#  volumes:
+#   - ./mongo:/data/db:rw
+
+#hygieia-jira:
+#  image:  cprimedevops/hygieia-jira-feature-collector
+#  container_name: hygieia-jira
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - jira
+#  - mongodb:mongo
+#  - hygieia-api
+#hygieia-jenkins-build:
+#  image: cprimedevops/hygieia-jenkins-build-collector
+#  container_name:  hygieia-jenkins-build
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - jenkins
+#  - mongodb:mongo
+#  - hygieia-api
+#hygieia-sonar-build:
+#  image: cprimedevops/hygieia-sonar-codequality-collector
+#  container_name: hygieia-sonar-build
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - sonarqube
+#  - mongodb:mongo
+#  - jenkins
+#  - hygieia-api
+#hygieia-github:
+#  image: cprimedevops/hygieia-github-collector
+#  container_name: hygieia-github
+#  volumes:
+#  - ./logs:/hygieia/logs
+#  links:
+#  - hygieia-api
+#  - mongodb:mongo
