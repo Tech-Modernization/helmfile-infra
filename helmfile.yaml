@@ -54,6 +54,7 @@ releases:
    chart: jetstack/cert-manager
    version: 0.14.0
 
+## TODO, remove this
 {{ if eq .Environment.Name "gcp" }}
  - name: prometheus-operator
    namespace: prometheus
@@ -139,14 +140,10 @@ releases:
 
  - name: sonarqube
    namespace: sonarqube 
-{{ if eq .Environment.Name "gcp" }}
    chart: stable/sonarqube
    version: 4.0.1
-{{ end }}
-{{ if ne .Environment.Name "gcp" }}
-   chart: acme/sonarqube
-   version: 4.0.1-1
-{{ end }}
+#   chart: acme/sonarqube
+#   version: 4.0.1-1
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
@@ -172,6 +169,11 @@ environments:
     - environments/ldev/values.yaml
     secrets:
     - environments/ldev/secret.yaml
+  azure:
+    values:
+    - environments/azure/values.yaml
+    secrets:
+    - environments/azure/secret.yaml
   gcp:
     values:
     - environments/gcp/values.yaml

@@ -1,0 +1,18 @@
+helm:
+  storageClass: standard
+  prometheus:
+   scrape_targets:
+     - myapp-prod.contino.io
+
+  registry: docker.io
+  imagePrefix: docker.io/
+  domain: allaboutthatbassstudios.com
+  artifactPrefix: https://artifactory.azure.chickenkiller.com/artifactory
+  issuer: letsencrypt-production
+  #issuer: letsencrypt-staging
+
+  prometheus-operator:
+    enabled: true
+
+  sonar:
+    pluginPrefix: https://binaries.sonarsource.com/Distribution/

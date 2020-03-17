@@ -20,6 +20,7 @@ is driven by files in git such as changes to yaml values files.
 
 ## Environements
 * **gcp** gke on google cloud
+* **azure** aks on azure cloud
 * **ldev** airgap local k8s lower environmentss
 * **lprod** airgap local higher environments  
 
@@ -295,6 +296,8 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 - https://www.reddit.com/r/devops/comments/awy81c/managing_helm_releases_terraform_helmsman/
 - https://docs.cloudposse.com/tools/helmfile/
 - https://medium.com/@naseem_60378/helmfile-its-like-a-helm-for-your-helm-74a908581599
+- https://costimuraru.wordpress.com/2019/08/22/setup-your-kubernetes-cluster-with-helmfile/
+- https://github.com/roboll/helmfile
 
 ## TODO
 - [x] secrets other than pgp (vault)
