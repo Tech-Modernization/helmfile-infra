@@ -1,0 +1,50 @@
+#add firewall rules for the GKE control plane nodes in the GKE docs
+#https://cloud.google.com/kubernetes-engine/docs/how-to/private-clusters#add_firewall_rules
+#prometheusOperator:
+#  admissionWebhooks:
+#    enabled: false
+
+grafana:
+  ## Configure additional grafana datasources
+  ## ref: http://docs.grafana.org/administration/provisioning/#datasources
+  additionalDataSources:
+    - name: prometheus-mesos
+      type: prometheus
+      access: proxy
+      orgId: 1
+      url: https://prometheus-prod.{{ .Environment.Values.helm.domain }}?access=server
+    - name: graphite
+      type: graphite
+      access: proxy
+      orgId: 1
+      url: http://10.9.35.129:80
+      jsonData:
+        graphiteVersion: "1.1"
+    - name: elasticsearch-cef-*
+      editable: true
+      type: elasticsearch
+      access: proxy
+      database: "cef-*"
+      url: https://kibana-prod.{{ .Environment.Values.helm.domain }}:9200
+      basicAuth: true
+      basicAuthUser: svc_grafana 
+      withCredentials: true
+      secureJsonData:
+        basicAuthPassword: {{ .Environment.Values.elasticsearch_svc_grafana_password }}
+      jsonData:
+        tlsSkipVerify: true
+        timeField: "@timestamp"
+        esVersion: 56
+        #logMessageField: message
+        #logLevelField: fields.level
+    - name: Stackdriver
+      editable: true
+      type: stackdriver
+      access: proxy
+      jsonData:
+        tokenUri: https://oauth2.googleapis.com/token
+        clientEmail: cloudfunctionsforintegrations@appspot.gserviceaccount.com
+        authenticationType: jwt
+        defaultProject: cloudfunctionsforintegrations
+#      secureJsonData:
+#        privateKey: TODO.Environment.Values.stackdriver_privateKey

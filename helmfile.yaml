@@ -104,39 +104,24 @@ releases:
    namespace: devops
    chart: stable/jenkins
    version: 1.9.22
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
  - name: jira
    namespace: devops
    chart: ./charts/atlassian-jira-software
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
  - name: confluence
    namespace: devops
    chart: ./charts/atlassian-confluence
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
 # needs work, deploys first time but no login, not configs, second apply fails
 # - name: gitlab
 #   namespace: devops
 #   #chart: stable/gitlab-ce
 #   chart: gitlab/gitlab
-#   values:
-#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-#     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
 # - name: hygieia
 #   namespace: devops
 #   chart: ./charts/hygieia
-#   values:
-#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-#     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
  - name: sonarqube
    namespace: sonarqube 
@@ -179,3 +164,8 @@ environments:
     - environments/gcp/values.yaml
     secrets:
     - environments/gcp/secret.yaml
+  aws:
+    values:
+    - environments/aws/values.yaml
+    secrets:
+    - environments/aws/secret.yaml
