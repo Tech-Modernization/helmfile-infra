@@ -2,12 +2,12 @@ helm:
   storageClass: standard
   prometheus:
    scrape_targets:
-     - myapp-prod.contino.io
+     - myapp-prod.gcp.continotb.com
 
   registry: docker.io
   imagePrefix: docker.io/
-  domain: allaboutthatbassstudios.com
-  artifactPrefix: https://artifactory.gcp.chickenkiller.com/artifactory
+  domain: continotb.com
+  artifactPrefix: https://artifactory.gcp.continotb.com/artifactory
   issuer: letsencrypt-production
   #issuer: letsencrypt-staging
 

@@ -15,6 +15,8 @@ repositories:
     url: https://charts.bitnami.com/bitnami
   - name: gitlab
     url: https://charts.gitlab.io/
+  - name: confluentinc
+    url: https://confluentinc.github.io/cp-helm-charts
 #    url: https://artifactory.contino.io/artifactory/helm-charts
 #  - name: myapp 
 #    url: https://artifactory.contino.io/artifactory/myappa-helm
@@ -104,14 +106,17 @@ releases:
    namespace: devops
    chart: stable/jenkins
    version: 1.9.22
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
- - name: jira
-   namespace: devops
-   chart: ./charts/atlassian-jira-software
+# - name: jira
+#   namespace: devops
+#   chart: ./charts/atlassian-jira-software
 
- - name: confluence
-   namespace: devops
-   chart: ./charts/atlassian-confluence
+# - name: confluence
+#   namespace: devops
+#   chart: ./charts/atlassian-confluence
 
 # needs work, deploys first time but no login, not configs, second apply fails
 # - name: gitlab
@@ -132,6 +137,13 @@ releases:
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+
+ - name: confluent-oss
+   namespace: cp
+   chart: confluentinc/cp-helm-charts
+   version: 0.4.1
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
 
 #####################################################################
 # environments

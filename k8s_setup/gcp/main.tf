@@ -34,12 +34,18 @@ data "google_client_config" "current" {
 #  project = var.project
 #}
 
+data "google_container_cluster" "primary" {
+  name = var.cluster_name
+  location = var.location
+}
+
 resource "google_container_cluster" "primary" {
+  count = 0
   name = var.cluster_name
   location = var.location
   remove_default_node_pool = true
   initial_node_count = 1
-  min_master_version = "1.15.9-gke.9"
+  min_master_version = "1.15.9-gke.26"
   node_config {
     preemptible  = true
     #machine_type = "n1-standard-1"
@@ -55,9 +61,11 @@ resource "google_container_cluster" "primary" {
 
 
 resource "google_container_node_pool" "node-pool-1" {
+  count = 0
   name       = "node-pool-1"
-  location = var.location
-  cluster    = google_container_cluster.primary.name
+  location   = var.location
+  #cluster    = google_container_cluster.primary.name
+  cluster    = var.cluster_name
   node_count = 1
 
   autoscaling {
@@ -97,6 +105,9 @@ resource "kubernetes_namespace" "prometheus" {
 }
 resource "kubernetes_namespace" "sonarqube" {
   metadata { name = "sonarqube" }
+}
+resource "kubernetes_namespace" "cp" {
+  metadata { name = "cp" }
 }
 
 

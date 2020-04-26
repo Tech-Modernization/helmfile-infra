@@ -10,7 +10,7 @@ terrafomr apply
 https://certbot.eff.org/docs/using.html#manual
 
 Use existing DNS hover
-gcp.allaboutthatbassstudios.com 
+gcp.continotb.com
 to IP of ingress
 
 afraid.org
