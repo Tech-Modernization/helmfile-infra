@@ -1,0 +1,9 @@
+customResources:
+  createEtcdClusterCRD: true
+etcdCluster:
+  #name: etcd-client
+  name: etcd
+  enableTLS: true
+  tls:
+    static:
+      operatorSecret: etcd-operator-tls

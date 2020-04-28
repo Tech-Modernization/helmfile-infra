@@ -91,6 +91,9 @@ resource "google_container_node_pool" "node-pool-1" {
 resource "kubernetes_namespace" "cert-manager" {
   metadata { name = "cert-manager" }
 }
+resource "kubernetes_namespace" "vault" {
+  metadata { name = "vault" }
+}
 resource "kubernetes_namespace" "devops" {
   metadata { name = "devops" }
 }

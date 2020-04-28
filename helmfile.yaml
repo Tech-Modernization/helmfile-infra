@@ -56,6 +56,26 @@ releases:
    chart: jetstack/cert-manager
    version: 0.14.0
 
+ - name: etcd-operator
+   namespace: vault
+   chart: stable/etcd-operator
+   version: 0.10.3
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+#
+# only do this first time, or as part of cluster setup 
+#   hooks:
+#     - events: ["prepare"]
+#       showlogs: true
+#       command: "./tls/setup-etcd.sh"
+
+ - name: vault
+   namespace: vault
+   chart: ./charts/vault-helm-0.5.0
+   version: 0.5.0
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
 ## TODO, remove this
 {{ if eq .Environment.Name "gcp" }}
  - name: prometheus-operator

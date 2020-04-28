@@ -1,0 +1,82 @@
+server:
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    limits:
+      memory: 256Mi
+      cpu: 250m
+  ingress:
+    enabled: true
+    annotations:
+        |
+        kubernetes.io/ingress.class: nginx
+        cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+        nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    hosts:
+      - host: vault.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+        paths: 
+          - /
+    tls:
+      - secretName: vault-{{ .Environment.Name }}-tls
+        hosts:
+          - vault.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+
+  # extraVolumes is a list of extra volumes to mount. These will be exposed
+  # to Vault in the path `/vault/userconfig/<name>/`. The value below is
+  # an array of objects, examples are shown below.
+  #extraVolumes: []
+  extraVolumes:
+    - type: secret
+      name: etcd-operator-tls
+      path: "/vault"
+#    - type: 'secret'
+#      name: 'kms-creds'
+
+# TODO: kubectl create secret —namespace=vault generic kms-creds --from-file=~credentials.json 
+
+#  extraEnvironmentVars:
+#    GOOGLE_REGION: global
+#    GOOGLE_PROJECT: "landingzone-271421"
+#    GOOGLE_APPLICATION_CREDENTIALS: /vault/userconfig/kms-creds/credentials.json
+
+
+  # This configures the Vault Statefulset to create a PVC for audit
+  # logs.  Once Vault is deployed, initialized and unseal, Vault must
+  # be configured to use this for audit logs.  This will be mounted to
+  # /vault/audit
+  # See https://www.vaultproject.io/docs/audit/index.html to know more
+  auditStorage:
+    enabled: true
+
+  ha:
+    enabled: true
+    config: |
+      ui = true
+      listener "tcp" {
+        tls_disable = 1
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+      }
+      storage "etcd" {
+        address         = "https://etcd-client.vault.svc.cluster.local:2379"
+        etcd_api        = "v3"
+        ha_enabled      = "true"
+        path            = "vault/"
+        sync            = "false"
+        tls_ca_file     = "/vault/etcd-operator-tls/etcd-client-ca.crt"
+        tls_cert_file   = "/vault/etcd-operator-tls/etcd-client.crt"
+        tls_key_file    = "/vault/etcd-operator-tls/etcd-client.key"
+      }
+      service_registration "kubernetes" {}
+
+      # Example configuration for using auto-unseal, using Google Cloud KMS. The
+      # GKMS keys must already exist, and the cluster must have a service account
+      # that is authorized to access GCP KMS.
+      #seal "gcpckms" {
+      #   credentials = "/vault/userconfig/kms-creds/credentials.json"    
+      #   project     = "landingzone-271421"
+      #   region      = "global"
+      #   key_ring    = "vault"
+      #   crypto_key  = "init"
+      #}

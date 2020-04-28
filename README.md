@@ -8,15 +8,21 @@ is driven by files in git such as changes to yaml values files.
 
 ## Charts
 * nginx-ingress
+* etcd-operator
+* vault
 * cert-manager
 * prometheus-operator
 * myapp-prometheus-operator
 * prometheus-pushgateway
 * jenkins
+* sonarqube
+* confluent-oss (kafka)
+
+## Charts commented out
 * jira
 * confluence
-* gitlab (commented out)
-* sonarqube
+* gitlab
+* hygieia
 
 ## Environements
 * **gcp** gke on google cloud
@@ -43,6 +49,7 @@ helmfile version v0.100.2
 # brew install sops
 # helm plugin install https://github.com/futuresimple/helm-secrets 
 # brew install gnu-getopt
+# brew install cfssl
 ```
 
 ## kube credentials
@@ -214,6 +221,13 @@ SonarQube is an open-source continous code inspection tools which empowers devel
 - https://github.com/dependency-check/dependency-check-sonar-plugin/releases/download/2.0.2/sonar-dependency-check-plugin-2.0.2.jar
 - https://github.com/SonarSource/sonar-ldap/releases/tag/2.2.0.608
 
+## Vault and etcd-operator
+Hashicorp Vault, backed by etcd 
+* etcd and root secrets stored in GCP KMS
+* etcd is HA with TLS
+* vault is HA with etcd backend
+* must unseal manually, autoseal not yet confiured
+
 ### Ingress Endpoints
 - https://sonar-gcp.{{domain}}/
 
@@ -228,9 +242,12 @@ Endpoints follow a naming convention where the "gcp" portion above is the enviro
 
 ## ServiceAccount and Namespace setup
 These charts use serviceaccounts and namespaces created by the cluster administratory beforehand 
-* The serviceaccount ***myapp-prometheus*** is used for all releases (may be split out to multiple in the future)
-* The namespace ***myapp-prometheus*** is used for prometheus-operatoe and prometheus-pushgateway
-* The namespace ***sonarqube*** is used for sonarqube
+* serviceaccount ***myapp-prometheus*** is used for all releases (may be split out to multiple in the future)
+* namespace ***myapp-prometheus*** is used for prometheus-operatoe and prometheus-pushgateway
+* namespace ***sonarqube*** is used for sonarqube
+* namespace ***vault*** is used for etcd-operator and vault
+* namespace ***cp*** is used for kafka
+* namespace ***devops*** is used for others
 
 For gcp, the cluster, service accounts, and namespaces must be setup outside of this helmfile project 
 ```
@@ -239,6 +256,8 @@ kubectl create ns prometheus
 kubectl create ns sonarqube
 kubectl create ns myapp-prometheus
 kubectl create ns devops
+kubectl create ns cp
+kubectl create ns vault
 ```
 Also, compute static IP and DNS records to support Ingress must also be done 
 * https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip
