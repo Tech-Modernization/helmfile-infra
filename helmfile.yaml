@@ -56,25 +56,24 @@ releases:
    chart: jetstack/cert-manager
    version: 0.14.0
 
- - name: etcd-operator
-   namespace: vault
-   chart: stable/etcd-operator
-   version: 0.10.3
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-#
-# only do this first time, or as part of cluster setup 
-#   hooks:
-#     - events: ["prepare"]
-#       showlogs: true
-#       command: "./tls/setup-etcd.sh"
-
- - name: vault
-   namespace: vault
-   chart: ./charts/vault-helm-0.5.0
-   version: 0.5.0
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+# - name: etcd-operator
+#   namespace: vault
+#   chart: stable/etcd-operator
+#   version: 0.10.3
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+##
+## only first time, or as part of cluster setup 
+##   hooks:
+##     - events: ["prepare"]
+##       showlogs: true
+##       command: "./tls/setup-etcd.sh"
+# - name: vault
+#   namespace: vault
+#   chart: ./charts/vault-helm-0.5.0
+#   version: 0.5.0
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
 
 ## TODO, remove this
 {{ if eq .Environment.Name "gcp" }}
@@ -94,38 +93,38 @@ releases:
        args: ["{{`{{.Release.Name}}`}}", "kubeapi"]
 {{ end }}
 
- - name: myapp-prometheus-operator
-   namespace: myapp-prometheus
-   chart: stable/prometheus-operator
-   #version: 6.0.0
-   version: 8.12.1
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
-   hooks:
-     - events: ["prepare"]
-       showlogs: true
-       command: "./jsonnet.sh"
-       args: ["{{`{{.Release.Name}}`}}", "myappapi"]
-#      args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
-#       command: "echo kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml"
-###     command: "kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml | kubectl apply -f -"
-#       #args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
+# - name: myapp-prometheus-operator
+#   namespace: myapp-prometheus
+#   chart: stable/prometheus-operator
+#   #version: 6.0.0
+#   version: 8.12.1
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+#     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml.gotmpl
+#     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+#   hooks:
+#     - events: ["prepare"]
+#       showlogs: true
+#       command: "./jsonnet.sh"
+#       args: ["{{`{{.Release.Name}}`}}", "myappapi"]
+##      args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
+##       command: "echo kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml"
+####     command: "kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml | kubectl apply -f -"
+##       #args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
 
- - name: prometheus-pushgateway
-   namespace: prometheus
-   chart: stable/prometheus-pushgateway
-   #version: 1.2.2
-   version: 1.0.1
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+# - name: prometheus-pushgateway
+#   namespace: prometheus
+#   chart: stable/prometheus-pushgateway
+#   #version: 1.2.2
+#   version: 1.0.1
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+#     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
  - name: jenkins
    namespace: devops
    chart: stable/jenkins
-   version: 1.9.22
+   version: 1.18.0
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
@@ -164,6 +163,11 @@ releases:
    version: 0.4.1
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
+ - name: twistlock-defender
+   namespace: twistlock
+   chart: ./charts/twistlock-defender
+   version: 19.11.506
 
 #####################################################################
 # environments
