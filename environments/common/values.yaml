@@ -5,6 +5,7 @@ helm:
   artifactPrefix: https://artifactory.contino.io/artifactory
   issuer: letsencrypt-staging
   #issuer: letsencrypt-production
+  adminEmail: bill.hood@contino.io
 
   prometheus-operator:
     enabled: false
