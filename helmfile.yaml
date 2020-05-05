@@ -17,7 +17,8 @@ repositories:
     url: https://charts.gitlab.io/
   - name: confluentinc
     url: https://confluentinc.github.io/cp-helm-charts
-#    url: https://artifactory.contino.io/artifactory/helm-charts
+  - name: strimzi
+    url: https://strimzi.io/charts/
 #  - name: myapp 
 #    url: https://artifactory.contino.io/artifactory/myappa-helm
 
@@ -157,12 +158,28 @@ releases:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
- - name: confluent-oss
-   namespace: cp
-   chart: confluentinc/cp-helm-charts
-   version: 0.4.1
+# - name: confluent-oss
+#   namespace: cp
+#   chart: confluentinc/cp-helm-charts
+#   version: 0.4.1
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
+ - name: strimzi
+   namespace: kafka
+   chart: strimzi/strimzi-kafka-operator
+   version: 0.17.0
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+   hooks:
+     - events: ["postsync"]
+       showlogs: true
+       command: "kubectl"
+       args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-cluster.yaml"]
+     - events: ["postsync"]
+       showlogs: true
+       command: "kubectl"
+       args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-topic.yaml"]
 
  - name: twistlock-defender
    namespace: twistlock

@@ -148,12 +148,12 @@ Prometheus-operator uses a Custom Resource Definition (CRD), named ServiceMonito
 In vk8, the full Prometheus Operator (including CED/operator, AlertManger, Prometheus, and Grafana) are deploy by the vk8 platform.  These are used to self-monitor the k8s cluster, and to monitor platform dependencies such as Jenkins, ELK, and Kafka. Deployment in this cluster deploys the Promwetheus Operator helm chart with the CRD/operator and AlertManager disabled, as these are shared by the platform Prometheus.  Only Prometheus and Grafana are installed in a myapp-prometheus namespace using a myapp-prometheus serviceaccount.
 
 ### Ingress Endpoints
-- https://myapp-grafana-gcp.{{domain}}/ 
-- https://myapp-prometheus-gcp.{{domain}}/
 - https://alertmanager-gcp.{{domain}}/ (shared)
 - https://grafana-gcp.{{domain}}/ (platform)
 - https://prometheus-gcp.{{domain}}/ (platform)
 - https://pushgateway-gcp.{{domain}}/ (platform)
+- https://myapp-grafana-gcp.{{domain}}/ 
+- https://myapp-prometheus-gcp.{{domain}}/
 
 Endpoints follow a naming convention where the "gcp" portion above is the environment, which is one of lprod, ldev, gcp
 
@@ -220,6 +220,8 @@ SonarQube is an open-source continous code inspection tools which empowers devel
 - https://github.com/sbaudoin/sonar-yaml/releases/download/v1.5.1/sonar-yaml-plugin-1.5.1.jar
 - https://github.com/dependency-check/dependency-check-sonar-plugin/releases/download/2.0.2/sonar-dependency-check-plugin-2.0.2.jar
 - https://github.com/SonarSource/sonar-ldap/releases/tag/2.2.0.608
+### Ingress Endpoints
+- https://sonar-gcp.{{domain}}/
 
 ## Vault and etcd-operator
 Hashicorp Vault, backed by etcd 
@@ -227,11 +229,18 @@ Hashicorp Vault, backed by etcd
 * etcd is HA with TLS
 * vault is HA with etcd backend
 * must unseal manually, autoseal not yet confiured
-
 ### Ingress Endpoints
-- https://sonar-gcp.{{domain}}/
+- https://vault-gcp.{{domain}}/
 
-Endpoints follow a naming convention where the "gcp" portion above is the environment, which is one of lprod, ldev, gcp
+## Confluent helm
+* https://github.com/confluentinc/cp-helm-charts
+* now unsupport by confluent - pretty lame and now deprecated
+
+## Strimzi Kafka Operator
+* https://github.com/strimzi/strimzi-kafka-operator/tree/master/helm-charts/strimzi-kafka-operator
+* installs basic operator in namespace kafka
+* postsync install CRD for kafka cluster and topic in namespace my-kafka-project
+
 
 ## References
 * Helm (https://helm.sh/docs/helm/)
@@ -243,11 +252,13 @@ Endpoints follow a naming convention where the "gcp" portion above is the enviro
 ## ServiceAccount and Namespace setup
 These charts use serviceaccounts and namespaces created by the cluster administratory beforehand 
 * serviceaccount ***myapp-prometheus*** is used for all releases (may be split out to multiple in the future)
-* namespace ***myapp-prometheus*** is used for prometheus-operatoe and prometheus-pushgateway
+* namespace ***myapp-prometheus*** is used for prometheus-operatoe and prometheus-pushgateway for example app
 * namespace ***sonarqube*** is used for sonarqube
 * namespace ***vault*** is used for etcd-operator and vault
-* namespace ***cp*** is used for kafka
 * namespace ***devops*** is used for others
+* namespace ***kafka*** is used for the Strimzi Kafka operator
+* namespace ***my-kafka-project*** is used for the example Kafka app
+* namespace ***cp*** is used for confluent platform kafka (deprecated)
 
 For gcp, the cluster, service accounts, and namespaces must be setup outside of this helmfile project 
 ```
@@ -258,6 +269,8 @@ kubectl create ns myapp-prometheus
 kubectl create ns devops
 kubectl create ns cp
 kubectl create ns vault
+kubectl create ns kafka
+kubectl create ns my-kafka-project
 ```
 Also, compute static IP and DNS records to support Ingress must also be done 
 * https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip
