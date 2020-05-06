@@ -175,11 +175,7 @@ releases:
      - events: ["postsync"]
        showlogs: true
        command: "kubectl"
-       args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-cluster.yaml"]
-     - events: ["postsync"]
-       showlogs: true
-       command: "kubectl"
-       args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-topic.yaml"]
+       args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-kafka.yaml"]
 
  - name: twistlock-defender
    namespace: twistlock
