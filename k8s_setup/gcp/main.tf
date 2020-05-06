@@ -109,10 +109,12 @@ resource "kubernetes_namespace" "prometheus" {
 resource "kubernetes_namespace" "sonarqube" {
   metadata { name = "sonarqube" }
 }
-resource "kubernetes_namespace" "cp" {
-  metadata { name = "cp" }
+resource "kubernetes_namespace" "kafka" {
+  metadata { name = "kafka" }
 }
-
+resource "kubernetes_namespace" "my-kafka-project" {
+  metadata { name = "my-kafka-project" }
+}
 
 resource "kubernetes_service_account" "helm" {
   metadata {
