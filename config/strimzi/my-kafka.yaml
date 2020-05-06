@@ -32,6 +32,8 @@ spec:
       type: persistent-claim
       size: 100Gi
       deleteClaim: false
+    metrics:
+      lowercaseOutputName: true
   entityOperator:
     topicOperator: {}
     userOperator: {}
@@ -80,3 +82,23 @@ spec:
   - hosts:
     - bridge.gcp.continotb.com
     secretName: bridge-gcp-tls
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kafka-service-monitor
+  namespace: prometheus
+  labels:
+    release: prometheus-operator
+spec:
+  selector:
+    matchLabels:
+      strimzi.io/kind: Kafka
+  namespaceSelector:
+    matchNames:
+      - my-kafka-project
+  endpoints:
+  - port: tcp-external 
+    honorLabels: true 
+    scheme: http
+
