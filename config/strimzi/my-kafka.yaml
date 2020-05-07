@@ -236,3 +236,28 @@ spec:
     scrapeTimeout: 10s
     path: /metrics
     scheme: http
+---
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+  labels:
+    strimzi.io/cluster: my-cluster
+    strimzi.io/kind: Kafka
+  name: my-cluster-network-policy-kafka-exporter
+  namespace: my-kafka-project
+spec:
+  ingress:
+  - from:
+    - namespaceSelector: {}
+    - podSelector:
+        matchLabels:
+          app: prometheus
+          prometheus: prometheus-operator-prometheus
+  - ports:
+    - port: 9404
+      protocol: TCP
+  podSelector:
+    matchLabels:
+      strimzi.io/name: my-cluster-kafka-exporter
+  policyTypes:
+  - Ingress
