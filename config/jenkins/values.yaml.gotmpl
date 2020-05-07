@@ -27,8 +27,29 @@ master:
     - google-container-registry-auth:0.3 
     - google-kubernetes-engine:0.8.1
     - google-cloudbuild:0.2.2
+    - prometheus:2.0.6
 #    - credentials-binding:1.22
 #    - command-launcher:1.4
+
+  # Expose Prometheus metrics
+  prometheus:
+    # If enabled, add the prometheus plugin to the list of plugins to install
+    # https://plugins.jenkins.io/prometheus
+    enabled: true
+    # Additional labels to add to the ServiceMonitor object
+    serviceMonitorAdditionalLabels:
+      release: prometheus-operator
+    # Set a custom namespace where to deploy ServiceMonitor resource
+    serviceMonitorNamespace: prometheus
+    scrapeInterval: 60s
+    # This is the default endpoint used by the prometheus plugin
+    scrapeEndpoint: /prometheus
+    # Additional labels to add to the PrometheusRule object
+    alertingRulesAdditionalLabels: {}
+    # An array of prometheus alerting rules
+    # See here: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+    # The `groups` root object is added by default, simply add the rule entries
+    alertingrules: []
 
 agent:
   resources:
