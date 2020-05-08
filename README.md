@@ -16,13 +16,15 @@ is driven by files in git such as changes to yaml values files.
 * prometheus-pushgateway
 * jenkins
 * sonarqube
-* confluent-oss (kafka)
+* strimzi (kafka)
+* twistlock (Prisma container security)
 
 ## Charts commented out
 * jira
 * confluence
 * gitlab
 * hygieia
+* confluent-oss (kafka)
 
 ## Environements
 * **gcp** gke on google cloud
