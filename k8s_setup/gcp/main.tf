@@ -8,44 +8,19 @@ data "google_client_config" "current" {
 
 # you must handle dns subdomain wildcard for ingress on your own
 
-#resource "google_compute_global_address" "ingress_service" {
-#  name = "ingress-static-ip-address"
-#}
-
-#resource "google_dns_record_set" "ingress_service" {
-#  project = var.project
-#  managed_zone = "continogcp"
-#  name = "ingress.${var.cluster_name}.${var.domain}"
-#  type = "A"
-#  ttl = 300
-#  rrdatas = ["${google_compute_global_address.ingress_service.address}"]
-#}
-
-#resource "google_dns_managed_zone" "zone" {
-#  count = "1"
-#  dns_name = "${var.cluster_name}.${var.domain}"
-#  name = var.cluster_name
-#  description = "dns zone for infra for helmfile-infra"
-#  #labels = "env=${var.cluster_name}"
-#}
-
-#data "google_dns_managed_zone" "zone" {
-#  name = var.cluster_name
-#  project = var.project
-#}
-
 data "google_container_cluster" "primary" {
   name = var.cluster_name
   location = var.location
 }
 
 resource "google_container_cluster" "primary" {
-  count = 0
+# if cluster managed by LZ
+#  count = 1
   name = var.cluster_name
   location = var.location
   remove_default_node_pool = true
   initial_node_count = 1
-  min_master_version = "1.15.9-gke.26"
+  min_master_version = "1.15.11-gke.12"
   node_config {
     preemptible  = true
     #machine_type = "n1-standard-1"

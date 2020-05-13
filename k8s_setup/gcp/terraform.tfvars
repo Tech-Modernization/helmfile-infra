@@ -1,7 +1,0 @@
-location="us-east1" 
-#gke-shared-prd"
-#project="continotb-7cf63d187e9f1a32"
-project="continotb-09e63773e488a8d6"
-cluster_name="gke-shared-prod"
-credential_file="~/git/squadzero-gcp-lz/organisation/orgAdminKeyGuardThisWithYourLife.json"
-cluster_ca_cert="~/git/squadzero-gcp-lz/organisation/cluster_ca_certification.pem"
