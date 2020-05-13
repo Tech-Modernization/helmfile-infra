@@ -231,6 +231,18 @@ Hashicorp Vault, backed by etcd
 * etcd is HA with TLS
 * vault is HA with etcd backend
 * must unseal manually, autoseal not yet confiured
+
+```
+kubectl exec -ti -n vault vault-0 -- vault operator init
+
+keep the 5 unseal keys and the inital root token somewhere safe
+
+on each of vault-0, 1, 2 you must provide at least 3 unseal keys to each
+
+kubectl exec -ti -n vault vault-0 -- vault operator unseal  XXXX
+
+```
+
 ### Ingress Endpoints
 - https://vault-gcp.{{domain}}/
 
