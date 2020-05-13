@@ -20,7 +20,8 @@ resource "google_container_cluster" "primary" {
   location = var.location
   remove_default_node_pool = true
   initial_node_count = 1
-  min_master_version = "1.15.11-gke.12"
+  #min_master_version = "1.15.11-gke.12"
+  min_master_version = "1.15.9-gke.24"
   node_config {
     preemptible  = true
     #machine_type = "n1-standard-1"
@@ -123,7 +124,7 @@ resource "null_resource" "import" {
     command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${var.location} --project ${var.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f ../issuer_prod.yaml && kubectl apply -f ../issuer_staging.yaml"
 
   }
-  depends_on = [google_container_node_pool.node-pool-1]
+  depends_on = [google_container_cluster.primary, google_container_node_pool.node-pool-1]
 }
 
 output "get-creds" {

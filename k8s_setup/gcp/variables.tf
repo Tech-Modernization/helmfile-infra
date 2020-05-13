@@ -1,7 +1,6 @@
 variable "location" {
   type        = string
   description = "Location (region or zone) for resources"
-  #default     = "us-central1" 
   default     = "us-central1" 
 }
 
