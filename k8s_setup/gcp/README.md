@@ -9,6 +9,7 @@
 * gcloud init, creaet a new configuration, bhood4contino, login with new account, pick project, don't set region and zone
 * enable cloud resource manager API https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=57562663465
 * enable kubernetes engine API https://console.developers.google.com/apis/api/container.googleapis.com/overview?project=57562663465
+* enable cloud KMS API https://console.developers.google.com/apis/api/cloudkms.googleapis.com/overview?project=57562663465
 
 ```
 terraform init
