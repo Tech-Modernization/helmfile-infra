@@ -242,6 +242,9 @@ Hashicorp Vault, backed by etcd
 * https://github.com/strimzi/strimzi-kafka-operator/tree/master/helm-charts/strimzi-kafka-operator
 * installs basic operator in namespace kafka
 * postsync install CRD for kafka cluster and topic in namespace my-kafka-project
+* NOTE: must manually add secret with prometheus config for strimzi or prometheus will not start
+ kubectl create secret generic prometheus-operator-prometheus-scrape-confg  --from-file=additional-scrape-configs.yaml -n prometheus
+
 
 
 ## References
