@@ -353,12 +353,15 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 - [x] integrated json net
 - [x] ingress
 - [x] cert-manager
+- [x] k8s_setup with terraform to create GKE cluster in trial account
+- [ ] Dockerfile
+- [ ] example app (webGoat)?
+- [ ] helmfile operator https://github.com/mumoshu/helmfile-operator or https://github.com/fluxcd/helm-operator
+- [ ] JenkinsFile 
 - [ ] config/setup jira/confluence/gitlab etc
 - [ ] externalDNS
-- [ ] k8s_setup with terraform to create GKE cluster, tenant, staticip, etc
 - [ ] LDAP/AD integration (or front-end it with oauth2-proxy and do SSO)
 - [ ] sonarqube rules/qualityprofile/qualitygate as code (backup/restore?)e
 - [ ] prometheus monitoring and dashboards for sonar, gitlab, jira, ....
-- [ ] helmfile hooks to create ns, operators, etc
-- [ ] helmfile-operator and/or fluxcd helm-operator  https://github.com/fluxcd/helm-operator (or JenkinsFile)
-- [ ] triggers for resources/extra.sh and load.sh
+- [ ] helmfile hooks to create ns
+- [ ] helmfile hooks for resources/extra.sh, dashboard loadall.sh, etc.
