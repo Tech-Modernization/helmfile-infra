@@ -18,6 +18,7 @@ is driven by files in git such as changes to yaml values files.
 * sonarqube
 * strimzi (kafka)
 * twistlock (Prisma container security)
+* atlantis (webhook setup for https://github.com/contino/srebot)
 
 ## Charts commented out
 * jira
@@ -272,10 +273,11 @@ These charts use serviceaccounts and namespaces created by the cluster administr
 * namespace ***myapp-prometheus*** is used for prometheus-operatoe and prometheus-pushgateway for example app
 * namespace ***sonarqube*** is used for sonarqube
 * namespace ***vault*** is used for etcd-operator and vault
-* namespace ***devops*** is used for others
 * namespace ***kafka*** is used for the Strimzi Kafka operator
 * namespace ***my-kafka-project*** is used for the example Kafka app
 * namespace ***cp*** is used for confluent platform kafka (deprecated)
+* namespace ***twistlock*** is used for Prisma Twistlock 
+* namespace ***devops*** is a default (e.g. jenkins, atlantis)
 
 For gcp, the cluster, service accounts, and namespaces must be setup outside of this helmfile project 
 ```

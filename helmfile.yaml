@@ -181,6 +181,14 @@ releases:
    chart: ./charts/twistlock-defender
    version: 19.11.506
 
+ - name: atlantis
+   namespace: devops
+   chart: stable/atlantis
+   version: 3.11.2
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
+
 #####################################################################
 # environments
 ###

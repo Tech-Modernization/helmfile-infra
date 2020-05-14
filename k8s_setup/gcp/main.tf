@@ -74,6 +74,9 @@ resource "kubernetes_namespace" "vault" {
 resource "kubernetes_namespace" "devops" {
   metadata { name = "devops" }
 }
+resource "kubernetes_namespace" "twistlock" {
+  metadata { name = "twistlock" }
+}
 resource "kubernetes_namespace" "myapp-prometheus" {
   metadata { name = "myapp-prometheus" }
 }

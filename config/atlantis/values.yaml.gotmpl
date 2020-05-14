@@ -1,0 +1,23 @@
+orgWhitelist: github.com/contino/*
+github:
+  #should be atlantis user
+  user: bhood4
+  token: {{ .Environment.Values.atlantis_token }}
+  secret: {{ .Environment.Values.atlantis_secret }}
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: "{{ .Environment.Values.helm.issuer }}"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  path: /
+  host: atlantis.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+  tls:
+    - secretName: atlantis-{{ .Environment.Name }}-tls
+      hosts:
+        - atlantis.{{ .Environment.Name }}.{{ .Environment.Values.helm.domain }}
+#googleServiceAccountSecrets:
+#  - name: some-secret-name
+#    secretName: the_k8s_secret_name
+# https://www.runatlantis.io/docs/provider-credentials.html#aws-specific-info
+#https://www.terraform.io/docs/providers/vault/index.html#using-vault-credentials-in-terraform-configuration
