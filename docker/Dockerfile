@@ -44,7 +44,11 @@ RUN curl -fsSL -o helmfile https://github.com/roboll/helmfile/releases/download/
 RUN chmod +x ./helmfile && mv ./helmfile /usr/local/bin/helmfile
 
 RUN pip install pyyml
-RUN curl -s https://packagecloud.io/install/repositories/gasolwu/jsonnet/script.deb.sh | bash
+#RUN curl -s https://packagecloud.io/install/repositories/gasolwu/jsonnet/script.deb.sh | bash
+# no snpa on docker
+#RUN apt-get install snapd -y 
+#RUN snap install jsonnet
+RUN curl -fsSL https://github.com/google/jsonnet/releases/download/v0.15.0/jsonnet-bin-v0.15.0-linux.tar.gz -o jsonnet.tgz && tar -xzvf jsonnet.tgz && mv jsonnet /usr/local/bin && mv jsonnetfmt /usr/local/bin && chmod +x /usr/local/bin/jsonnet* && rm jsonnet.tgz
 
 RUN curl https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 -o /usr/local/bin/cfssl
 RUN curl https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64 -o /usr/local/bin/cfssljson
@@ -52,6 +56,9 @@ RUN chmod +x /usr/local/bin/cfssl /usr/local/bin/cfssljson
 
 RUN curl -fsSL https://github.com/mozilla/sops/releases/download/v3.5.0/sops-v3.5.0.linux -o /usr/local/bin/sops
 RUN chmod +x /usr/local/bin/sops
+
+RUN apt-get install unzip
+RUN curl -fsSL https://releases.hashicorp.com/terraform/0.12.25/terraform_0.12.25_linux_amd64.zip -o terraform_0.12.25_linux_amd64.zip && unzip terraform_0.12.25_linux_amd64.zip && mv terraform /usr/local/bin/&& chmod +x /usr/local/bin/terraform && rm terraform_0.12.25_linux_amd64.zip
 
 # cleanup
 #RUN apt-get remove --purge -y $BUILD_PACKAGES $(apt-mark showauto) && rm -rf /var/lib/apt/lists/*
