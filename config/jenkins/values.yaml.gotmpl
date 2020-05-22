@@ -1,5 +1,6 @@
 master:
   adminPassword: {{ .Environment.Values.grafana_adminPassword }}
+  adminSshKey: ~/.ssh/id_rsa
   serviceType: ClusterIP
   ingress:
     annotations: 
