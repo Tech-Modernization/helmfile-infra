@@ -19,8 +19,8 @@ repositories:
     url: https://confluentinc.github.io/cp-helm-charts
   - name: strimzi
     url: https://strimzi.io/charts/
-#  - name: myapp 
-#    url: https://artifactory.contino.io/artifactory/myappa-helm
+  - name: cloudbees
+    url: https://charts.cloudbees.com/public/cloudbees
 
 #####################################################################
 # helmDefaults
@@ -123,11 +123,12 @@ releases:
 
  - name: jenkins
    namespace: devops
-   chart: stable/jenkins
-   version: 1.18.0
+   chart: cloudbees/cloudbees-jenkins-distribution
+   version: 2.204.307
+#   chart: stable/jenkins
+#   version: 1.18.0
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
 
 # - name: jira
 #   namespace: devops
