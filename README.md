@@ -19,6 +19,7 @@ is driven by files in git such as changes to yaml values files.
 * strimzi (kafka)
 * twistlock (Prisma container security)
 * atlantis (webhook setup for https://github.com/contino/srebot)
+* spinnaker
 
 ## Charts commented out
 * jira

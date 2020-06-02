@@ -48,6 +48,7 @@ releases:
  - name: nginx-ingress
    namespace: nginx
    chart: stable/nginx-ingress
+   version: 1.37.0
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
      - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
@@ -186,6 +187,13 @@ releases:
    namespace: devops
    chart: stable/atlantis
    version: 3.11.2
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+
+ - name: spinnaker
+   namespace: devops
+   chart: stable/spinnaker
+   version: 2.0.0-rc4
    values:
      - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
 
