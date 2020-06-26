@@ -59,6 +59,10 @@ resource "google_container_cluster" "primary" {
   network            = google_compute_network.default.name
   subnetwork         = google_compute_subnetwork.default.name
 
+  private_cluster_config {
+    enable_private_nodes = true
+  }
+  
   #node_config {
   #  preemptible  = true
   #  #machine_type = "n1-standard-1"
