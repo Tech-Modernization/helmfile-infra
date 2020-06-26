@@ -18,9 +18,14 @@ variable "cluster_name" {
   default     = "gcp"
 }
 
+variable "network_name" {
+  type        = string
+  description = "network name"
+  default     = "gcp_network"
+}
+
 variable "credential_file" {
   type        = string
   description = "gcp credential file"
-  #default    = "~/account.json"
   default    = "~/account.json"
 }
