@@ -15,92 +15,116 @@ data "google_container_cluster" "primary" {
   location = var.location
 }
 
-resource "google_compute_network" "default" {
-  name                    = var.network_name
-  auto_create_subnetworks = false
-}
+module "gke-network" {
+  source       = "terraform-google-modules/network/google"
+  version      = "~> 2.0"
+  project_id   = var.project
+  network_name = var.network_name
 
-resource "google_compute_subnetwork" "default" {
-  name                     = var.network_name
-  ip_cidr_range            = "10.127.0.0/20"
-  network                  = google_compute_network.default.self_link
-  region                   = var.location
-  private_ip_google_access = true
-}
+  subnets = [
+    {
+      subnet_name   = var.network_name
+      subnet_ip     = "10.0.0.0/24"
+      subnet_region = var.location
+    },
+  ]
 
-data "google_container_engine_versions" "version" {
-  project            = var.project
-  location           = var.location
+  secondary_ranges = {
+    "random-gke-subnet" = [
+      {
+        range_name    = "random-ip-range-pods"
+        ip_cidr_range = "10.1.0.0/16"
+      },
+      {
+        range_name    = "random-ip-range-services"
+        ip_cidr_range = "10.2.0.0/20"
+      },
+  ] }
 }
+    
+module "gke" {
+  source                            = "../../modules/private-cluster"
+  project_id                        = var.project_id
+  name                              = "random-test-cluster"
+  region                            = "us-west1"
+  regional                          = true
+  network                           = module.gke-network.network_name
+  subnetwork                        = module.gke-network.subnets_names[0]
+  ip_range_pods                     = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
+  ip_range_services                 = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
+  enable_private_endpoint           = true
+  enable_private_nodes              = true
+  master_ipv4_cidr_block            = "172.16.0.16/28"
+  network_policy                    = true
+  horizontal_pod_autoscaling        = true
+  service_account                   = "create"
+  remove_default_node_pool          = true
+  disable_legacy_metadata_endpoints = true
 
-module "gke-cluster" {
-  source                     = "git::https://github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/beta-private-cluster"
-  project_id                 = var.project
-  name                       = var.cluster_name
-  region                     = var.location
-  network                    = google_compute_network.default.name
-  #network_project_id         = var.network_project
-  subnetwork                 = google_compute_subnetwork.default.name
-  ip_range_pods              = var.ip_range_pods
-  ip_range_services          = var.ip_range_services
-  create_service_account     = true
-  kubernetes_version         = var.kubernetes_version == "" ? data.google_container_engine_versions.version.default_cluster_version : var.kubernetes_version
-  node_version               = var.node_version
-  skip_provisioners          = true
+  master_authorized_networks = [
+    {
+      cidr_block   = module.gke-network.subnets_ips[0]
+      display_name = "VPC"
+    },
+  ]
+
   node_pools = [
-    { 
-      name            = "pool1"
-      machine_type    = "n1-standard-2"
-      min_count       = 1
-      max_count       = 2
-      disk_size_gb    = 100
-      disk_type       = "pd-standard"
-      image_type      = "COS"
-      auto_repair     = true
-      preemptible     = false
+    {
+      name               = "my-node-pool"
+      machine_type       = "n1-standard-1"
+      min_count          = 1
+      max_count          = 1
+      disk_size_gb       = 100
+      disk_type          = "pd-ssd"
+      image_type         = "COS"
+      auto_repair        = true
+      auto_upgrade       = false
+      preemptible        = false
       initial_node_count = 1
-      #auto_upgrade    = true
-      #version          = var.node_version
-      #service_account = google_service_account.vault-admin.email
     },
   ]
 
   node_pools_oauth_scopes = {
-    all = []
-    pool1 = [
-      "https://www.googleapis.com/auth/cloud-platform",
+    all = [
+      "https://www.googleapis.com/auth/trace.append",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/servicecontrol",
     ]
+
+    my-node-pool = [
+      "https://www.googleapis.com/auth/trace.append",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/servicecontrol",
+    ]
+  }
+
+  node_pools_labels = {
+
+    all = {
+
+    }
+    my-node-pool = {
+
+    }
   }
 
   node_pools_metadata = {
     all = {}
-    pool1 = {}
-  }
 
-  node_pools_taints = {
-    all = []
-    pool1 = []
-  }
+    my-node-pool = {}
 
-  node_pools_labels = {
-    all = {}
-    pool1 = {
-      environment = "sandbox"
-    }
   }
 
   node_pools_tags = {
     all = []
-    pool1 = [
-      "sandbox",
-    ]
+
+    my-node-pool = []
+
   }
-  remove_default_node_pool   = true
-  initial_node_count         = var.initial_node_count
-  enable_private_nodes       = false
-  identity_namespace         = "${var.project}.svc.id.goog"
-  master_ipv4_cidr_block     = var.master_ipv4_cidr_block
-  master_authorized_networks = var.master_authorized_networks
 }
 
 resource "kubernetes_namespace" "cert-manager" {
