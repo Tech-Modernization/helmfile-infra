@@ -40,13 +40,13 @@ resource "google_container_cluster" "primary" {
   # zone               = "${var.zone}"
   # min_master_version = "${data.google_container_engine_versions.default.latest_master_version}"
   min_master_version = "1.15.9-gke.24"
-  network            = "${google_compute_subnetwork.default.name}"
+  network            = "${google_compute_network.default.name}"
   subnetwork         = "${google_compute_subnetwork.default.name}"
 
-  node_config {
-    preemptible  = true
-    #machine_type = "n1-standard-1"
-  }
+  #node_config {
+  #  preemptible  = true
+  #  #machine_type = "n1-standard-1"
+  #}
   master_auth {
     username = ""
     password = ""
