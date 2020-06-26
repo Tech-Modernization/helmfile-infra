@@ -13,6 +13,23 @@ data "google_container_cluster" "primary" {
   location = var.location
 }
 
+resource "google_compute_network" "default" {
+  name                    = "${var.network_name}"
+  auto_create_subnetworks = false
+}
+
+resource "google_compute_subnetwork" "default" {
+  name                     = "${var.network_name}"
+  ip_cidr_range            = "10.127.0.0/20"
+  network                  = "${google_compute_network.default.self_link}"
+  region                   = "${var.region}"
+  private_ip_google_access = true
+}
+
+# data "google_container_engine_versions" "default" {
+#   zone = "${var.zone}"
+# } 
+
 resource "google_container_cluster" "primary" {
 # if cluster managed by LZ
 #  count = 0
@@ -20,8 +37,12 @@ resource "google_container_cluster" "primary" {
   location = var.location
   remove_default_node_pool = true
   initial_node_count = 1
-  #min_master_version = "1.15.11-gke.12"
+  # zone               = "${var.zone}"
+  # min_master_version = "${data.google_container_engine_versions.default.latest_master_version}"
   min_master_version = "1.15.9-gke.24"
+  network            = "${google_compute_subnetwork.default.name}"
+  subnetwork         = "${google_compute_subnetwork.default.name}"
+
   node_config {
     preemptible  = true
     #machine_type = "n1-standard-1"
