@@ -21,7 +21,7 @@ variable "cluster_name" {
 variable "network_name" {
   type        = string
   description = "network name"
-  default     = "gcp_network"
+  default     = "default"
 }
 
 variable "credential_file" {
