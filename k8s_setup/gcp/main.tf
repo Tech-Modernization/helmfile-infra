@@ -1,6 +1,6 @@
 resource "google_project_service" "service" {
   count   = length(var.project_services)
-  project = var.project
+  project = data.google_client_config.current.project
   service = element(var.project_services, count.index)
   disable_on_destroy = false
 }
@@ -12,20 +12,20 @@ data "google_client_config" "current" {
 
 data "google_container_cluster" "primary" {
   name = var.cluster_name
-  location = var.location
+  location = data.google_client_config.current.region
 }
 
 module "gke-network" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 2.0"
-  project_id   = var.project
+  project_id   = data.google_client_config.current.project
   network_name = var.network_name
 
   subnets = [
     {
       subnet_name   = var.network_name
       subnet_ip     = "10.0.0.0/24"
-      subnet_region = var.location
+      subnet_region = data.google_client_config.current.region
     },
   ]
 
@@ -44,7 +44,7 @@ module "gke-network" {
     
 module "gke" {
   source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-  project_id                        = var.project
+  project_id                        = data.google_client_config.current.project
   name                              = "random-test-cluster"
   region                            = "us-west1"
   regional                          = true
@@ -189,12 +189,12 @@ resource "null_resource" "import" {
     #run = kubernetes_namespace.cert-manager.uid
   }
   provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${var.location} --project ${var.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f ../issuer_prod.yaml && kubectl apply -f ../issuer_staging.yaml"
+    command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${data.google_client_config.current.region} --project ${data.google_client_config.current.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f ../issuer_prod.yaml && kubectl apply -f ../issuer_staging.yaml"
 
   }
   depends_on = [module.gke.ca_certificate]
 }
 
 output "get-creds" {
- value = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${var.location} --project ${var.project}"
+ value = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${data.google_client_config.current.region} --project ${data.google_client_config.current.project}"
 }
