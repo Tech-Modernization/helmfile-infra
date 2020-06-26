@@ -1,6 +1,22 @@
-resource "google_project_service" "kubernetes" {
+resource "google_project_service" "compute" {
+  project = var.project
+  service = "compute.googleapis.com"
+}
+resource "google_project_service" "container" {
   project = var.project
   service = "container.googleapis.com"
+}
+resource "google_project_service" "iam" {
+  project = var.project
+  service = "iam.googleapis.com"
+}
+resource "google_project_service" "serviceusage" {
+  project = var.project
+  service = "serviceusage.googleapis.com"
+}
+resource "google_project_service" "cloudresourcemanager" {
+  project = var.project
+  service = "cloudresourcemanager.googleapis.com"
 }
 
 data "google_client_config" "current" {
@@ -14,20 +30,20 @@ data "google_container_cluster" "primary" {
 }
 
 resource "google_compute_network" "default" {
-  name                    = "${var.network_name}"
+  name                    = var.network_name
   auto_create_subnetworks = false
 }
 
 resource "google_compute_subnetwork" "default" {
-  name                     = "${var.network_name}"
+  name                     = var.network_name
   ip_cidr_range            = "10.127.0.0/20"
-  network                  = "${google_compute_network.default.self_link}"
-  region                   = "${var.region}"
+  network                  = google_compute_network.default.self_link
+  region                   = var.location
   private_ip_google_access = true
 }
 
 # data "google_container_engine_versions" "default" {
-#   zone = "${var.zone}"
+#   zone = var.zone
 # } 
 
 resource "google_container_cluster" "primary" {
@@ -37,11 +53,11 @@ resource "google_container_cluster" "primary" {
   location = var.location
   remove_default_node_pool = true
   initial_node_count = 1
-  # zone               = "${var.zone}"
-  # min_master_version = "${data.google_container_engine_versions.default.latest_master_version}"
+  # zone               = var.zone
+  # min_master_version = data.google_container_engine_versions.default.latest_master_version
   min_master_version = "1.15.9-gke.24"
-  network            = "${google_compute_network.default.name}"
-  subnetwork         = "${google_compute_subnetwork.default.name}"
+  network            = google_compute_network.default.name
+  subnetwork         = google_compute_subnetwork.default.name
 
   #node_config {
   #  preemptible  = true
