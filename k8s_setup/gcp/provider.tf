@@ -1,7 +1,4 @@
 provider "google" {
-//  credentials = file(var.credential_file)
-//  project = var.project
-//  region  = var.location
 }
 provider "kubernetes" {
   load_config_file = false
