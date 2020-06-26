@@ -61,6 +61,7 @@ resource "google_container_cluster" "primary" {
 
   private_cluster_config {
     enable_private_nodes = true
+    enable_private_endpoint = false
   }
   
   #node_config {
