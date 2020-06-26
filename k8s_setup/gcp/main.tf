@@ -43,7 +43,7 @@ module "gke-network" {
 }
     
 module "gke" {
-  source                            = "terraform-google-modules/terraform-google-kubernetes-engine/private-cluster"
+  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
   project_id                        = var.project
   name                              = "random-test-cluster"
   region                            = "us-west1"
