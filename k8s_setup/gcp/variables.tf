@@ -1,13 +1,3 @@
-variable "location" {
-  type        = string
-  description = "Location (region or zone) for resources"
-}
-
-variable "project" {
-  type        = string
-  description = "Project were resources are managed"
-}
-
 variable "cluster_name" {
   type        = string
   description = "cluster name"
