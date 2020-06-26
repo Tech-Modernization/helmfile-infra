@@ -1,22 +1,8 @@
-resource "google_project_service" "compute" {
+resource "google_project_service" "service" {
+  count   = length(var.project_services)
   project = var.project
-  service = "compute.googleapis.com"
-}
-resource "google_project_service" "container" {
-  project = var.project
-  service = "container.googleapis.com"
-}
-resource "google_project_service" "iam" {
-  project = var.project
-  service = "iam.googleapis.com"
-}
-resource "google_project_service" "serviceusage" {
-  project = var.project
-  service = "serviceusage.googleapis.com"
-}
-resource "google_project_service" "cloudresourcemanager" {
-  project = var.project
-  service = "cloudresourcemanager.googleapis.com"
+  service = element(var.project_services, count.index)
+  disable_on_destroy = false
 }
 
 data "google_client_config" "current" {
@@ -42,69 +28,79 @@ resource "google_compute_subnetwork" "default" {
   private_ip_google_access = true
 }
 
-# data "google_container_engine_versions" "default" {
-#   zone = var.zone
-# } 
-
-resource "google_container_cluster" "primary" {
-# if cluster managed by LZ
-#  count = 0
-  name = var.cluster_name
-  location = var.location
-  remove_default_node_pool = true
-  initial_node_count = 1
-  # zone               = var.zone
-  # min_master_version = data.google_container_engine_versions.default.latest_master_version
-  min_master_version = "1.15.9-gke.24"
-  network            = google_compute_network.default.name
-  subnetwork         = google_compute_subnetwork.default.name
-
-  private_cluster_config {
-    enable_private_nodes = true
-    enable_private_endpoint = false
-  }
-  
-  #node_config {
-  #  preemptible  = true
-  #  #machine_type = "n1-standard-1"
-  #}
-  master_auth {
-    username = ""
-    password = ""
-    client_certificate_config {
-      issue_client_certificate = false
-    }
-  }
+data "google_container_engine_versions" "version" {
+  project            = var.project
+  location           = var.location
 }
 
+module "gke-cluster" {
+  source                     = "git::https://github.com/terraform-google-modules/terraform-google-kubernetes-engine.git//modules/beta-private-cluster"
+  project_id                 = var.project
+  name                       = var.cluster_name
+  region                     = var.location
+  network                    = google_compute_network.default.name
+  #network_project_id         = var.network_project
+  subnetwork                 = google_compute_subnetwork.default.name
+  ip_range_pods              = var.ip_range_pods
+  ip_range_services          = var.ip_range_services
+  create_service_account     = true
+  kubernetes_version         = var.kubernetes_version == "" ? data.google_container_engine_versions.version.default_cluster_version : var.kubernetes_version
+  node_version               = var.node_version
+  skip_provisioners          = true
+  node_pools = [
+    { 
+      name            = "pool1"
+      machine_type    = "n1-standard-2"
+      min_count       = 1
+      max_count       = 2
+      disk_size_gb    = 100
+      disk_type       = "pd-standard"
+      image_type      = "COS"
+      auto_repair     = true
+      preemptible     = false
+      initial_node_count = 1
+      #auto_upgrade    = true
+      #version          = var.node_version
+      #service_account = google_service_account.vault-admin.email
+    },
+  ]
 
-resource "google_container_node_pool" "node-pool-1" {
-# if cluster managed by LZ
-#  count = 0
-  name       = "node-pool-1"
-  location   = var.location
-  cluster    = google_container_cluster.primary.name
-  #cluster    = var.cluster_name
-  node_count = 1
-
-  autoscaling {
-    min_node_count = 1
-    max_node_count = 5
-  }
-
-  node_config {
-    preemptible  = true
-    machine_type = "n1-standard-2"
-    metadata = {
-      disable-legacy-endpoints = "true"
-    }
-    oauth_scopes = [
-      "https://www.googleapis.com/auth/compute",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/logging.write",
-      "https://www.googleapis.com/auth/monitoring",
+  node_pools_oauth_scopes = {
+    all = []
+    pool1 = [
+      "https://www.googleapis.com/auth/cloud-platform",
     ]
   }
+
+  node_pools_metadata = {
+    all = {}
+    pool1 = {}
+  }
+
+  node_pools_taints = {
+    all = []
+    pool1 = []
+  }
+
+  node_pools_labels = {
+    all = {}
+    pool1 = {
+      environment = "sandbox"
+    }
+  }
+
+  node_pools_tags = {
+    all = []
+    pool1 = [
+      "sandbox",
+    ]
+  }
+  remove_default_node_pool   = true
+  initial_node_count         = var.initial_node_count
+  enable_private_nodes       = false
+  identity_namespace         = "${var.project}.svc.id.goog"
+  master_ipv4_cidr_block     = var.master_ipv4_cidr_block
+  master_authorized_networks = var.master_authorized_networks
 }
 
 resource "kubernetes_namespace" "cert-manager" {
