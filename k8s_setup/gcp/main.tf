@@ -190,7 +190,7 @@ resource "null_resource" "import" {
     command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${var.location} --project ${var.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f ../issuer_prod.yaml && kubectl apply -f ../issuer_staging.yaml"
 
   }
-  depends_on = [google_container_cluster.primary, google_container_node_pool.node-pool-1]
+  depends_on = [module.gke.ca_certificate]
 }
 
 output "get-creds" {
