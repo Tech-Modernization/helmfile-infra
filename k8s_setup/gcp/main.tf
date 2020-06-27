@@ -47,7 +47,7 @@ module "gke" {
   ip_range_services                 = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
   enable_private_endpoint           = false
   enable_private_nodes              = true
-  master_ipv4_cidr_block            = "172.16.0.16/28"
+  #master_ipv4_cidr_block            = "172.16.0.16/28"
   network_policy                    = true
   horizontal_pod_autoscaling        = true
   service_account                   = "create"
@@ -58,6 +58,10 @@ module "gke" {
     {
       cidr_block   = module.gke-network.subnets_ips[0]
       display_name = "VPC"
+    },
+    {
+      cidr_block   = "0.0.0.0/32"
+      display_name = "ALL"
     },
   ]
 
