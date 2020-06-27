@@ -44,7 +44,7 @@ module "gke" {
   regional               = true
   region                 = data.google_client_config.current.region
   network                = module.gke-network.network_name
-  subnetwork             = module.gcp-network.subnets_names[0]
+  subnetwork             = module.gke-network.subnets_names[0]
   ip_range_pods          = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
   ip_range_services      = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
   create_service_account = true
