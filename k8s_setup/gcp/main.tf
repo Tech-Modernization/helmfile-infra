@@ -19,7 +19,7 @@ module "gke-network" {
       subnet_name   = "random-gke-subnet"
       subnet_ip     = "10.0.0.0/24"
       subnet_region = data.google_client_config.current.region
-      subnet_private_access	= false
+      subnet_private_access	= true
       subnet_flow_logs = true
     },
   ]
