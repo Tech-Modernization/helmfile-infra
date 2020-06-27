@@ -99,6 +99,7 @@ module "gke" {
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/logging.write",
     ]
     my-node-pool = [
       "https://www.googleapis.com/auth/trace.append",
@@ -106,6 +107,7 @@ module "gke" {
       "https://www.googleapis.com/auth/monitoring",
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/servicecontrol",
+      "https://www.googleapis.com/auth/logging.write",
     ]
   }
   node_pools_labels = {
