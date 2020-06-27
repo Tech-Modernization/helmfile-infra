@@ -23,7 +23,7 @@ module "gke-network" {
 
   subnets = [
     {
-      subnet_name   = var.network_name
+      subnet_name   = "random-gke-subnet"
       subnet_ip     = "10.0.0.0/24"
       subnet_region = data.google_client_config.current.region
     },
