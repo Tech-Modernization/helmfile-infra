@@ -77,17 +77,12 @@ module "gke" {
 #    },
 #  ]
 
-  autoscaling {
-    min_node_count = 1
-    max_node_count = 4
-  }
-
   node_pools = [
     {
       name               = "my-node-pool"
       machine_type       = "n1-standard-2"
       min_count          = 1
-      max_count          = 1
+      max_count          = 5
       disk_size_gb       = 100
       disk_type          = "pd-ssd"
       image_type         = "COS"
