@@ -2,7 +2,7 @@ resource "google_project_service" "service" {
   count   = length(var.project_services)
   project = data.google_client_config.current.project
   service = element(var.project_services, count.index)
-  disable_on_destroy = false
+  #disable_on_destroy = false
 }
 
 data "google_client_config" "current" {
