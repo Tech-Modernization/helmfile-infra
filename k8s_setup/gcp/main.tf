@@ -52,7 +52,7 @@ module "gke" {
   subnetwork                        = module.gke-network.subnets_names[0]
   ip_range_pods                     = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
   ip_range_services                 = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
-  enable_private_endpoint           = true
+  enable_private_endpoint           = false
   enable_private_nodes              = true
   master_ipv4_cidr_block            = "172.16.0.16/28"
   network_policy                    = true
@@ -92,7 +92,6 @@ module "gke" {
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/servicecontrol",
     ]
-
     my-node-pool = [
       "https://www.googleapis.com/auth/trace.append",
       "https://www.googleapis.com/auth/service.management.readonly",
@@ -103,27 +102,18 @@ module "gke" {
   }
 
   node_pools_labels = {
-
-    all = {
-
-    }
-    my-node-pool = {
-
-    }
+    all = {}
+    my-node-pool = {}
   }
 
   node_pools_metadata = {
     all = {}
-
     my-node-pool = {}
-
   }
 
   node_pools_tags = {
     all = []
-
     my-node-pool = []
-
   }
 }
 
