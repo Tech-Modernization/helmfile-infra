@@ -176,6 +176,16 @@ resource "kubernetes_cluster_role_binding" "helm" {
     name      = "helm"
     namespace = "kube-system"
   }
+  subject {
+    kind      = "User"
+    name      = var.admin_user
+    api_group = "rbac.authorization.k8s.io"
+  }
+#  subject {
+#    kind      = "Group"
+#    name      = "system:masters"
+#    api_group = "rbac.authorization.k8s.io"
+#  }
 }
 
 
