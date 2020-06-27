@@ -124,68 +124,48 @@ module "gke" {
   }
 }
       
-resource "kubernetes_namespace" "cert-manager" {
-  metadata { name = "cert-manager" }
-}
-resource "kubernetes_namespace" "vault" {
-  metadata { name = "vault" }
-}
-resource "kubernetes_namespace" "devops" {
-  metadata { name = "devops" }
-}
-resource "kubernetes_namespace" "twistlock" {
-  metadata { name = "twistlock" }
-}
-resource "kubernetes_namespace" "myapp-prometheus" {
-  metadata { name = "myapp-prometheus" }
-}
-resource "kubernetes_namespace" "nginx" {
-  metadata { name = "nginx" }
-}
-resource "kubernetes_namespace" "prometheus" {
-  metadata { name = "prometheus" }
-}
-resource "kubernetes_namespace" "sonarqube" {
-  metadata { name = "sonarqube" }
-}
-resource "kubernetes_namespace" "kafka" {
-  metadata { name = "kafka" }
-}
-resource "kubernetes_namespace" "my-kafka-project" {
-  metadata { name = "my-kafka-project" }
-}
+#resource "kubernetes_namespace" "cert-manager" {
+#  metadata { name = "cert-manager" }
+#}
+#resource "kubernetes_namespace" "vault" {
+#  metadata { name = "vault" }
+#}
+#resource "kubernetes_namespace" "devops" {
+#  metadata { name = "devops" }
+#}
+#resource "kubernetes_namespace" "twistlock" {
+#  metadata { name = "twistlock" }
+#}
+#resource "kubernetes_namespace" "myapp-prometheus" {
+#  metadata { name = "myapp-prometheus" }
+#}
+#resource "kubernetes_namespace" "nginx" {
+#  metadata { name = "nginx" }
+#}
+#resource "kubernetes_namespace" "prometheus" {
+#  metadata { name = "prometheus" }
+#}
+#resource "kubernetes_namespace" "sonarqube" {
+#  metadata { name = "sonarqube" }
+#}
+#resource "kubernetes_namespace" "kafka" {
+#  metadata { name = "kafka" }
+#}
+#resource "kubernetes_namespace" "my-kafka-project" {
+#  metadata { name = "my-kafka-project" }
+#}
 
-resource "kubernetes_service_account" "helm" {
-  metadata {
-    name = "helm"
-    namespace = "kube-system"
-  }
-}
-
-resource "kubernetes_cluster_role_binding" "helm" {
-  metadata {
-    name = "helm"
-  }
+resource "kubernetes_cluster_role_binding" "admin" {
   role_ref {
     api_group = "rbac.authorization.k8s.io"
     kind      = "ClusterRole"
     name      = "cluster-admin"
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = "helm"
-    namespace = "kube-system"
-  }
-  subject {
     kind      = "User"
     name      = var.admin_user
     api_group = "rbac.authorization.k8s.io"
   }
-#  subject {
-#    kind      = "Group"
-#    name      = "system:masters"
-#    api_group = "rbac.authorization.k8s.io"
-#  }
 }
 
 
