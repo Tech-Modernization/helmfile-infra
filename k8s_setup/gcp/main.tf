@@ -178,6 +178,21 @@ resource "kubernetes_cluster_role_binding" "helm" {
   }
 }
 
+
+resource "kubernetes_manifest" "test-configmap" {
+  provider = kubernetes-alpha
+  manifest = "$file(../cert-manager-certificaterequests.tf)"
+}
+
+#cert-manager-certificaterequests.tf
+#cert-manager-challenges.tf
+#cert-manager-issuers.tf
+#issuer_prod.tf
+#cert-manager-certificates.tf
+#cert-manager-clusterissuers.tf
+#cert-manager-orders.tf
+#issuer_staging.tf
+
 #kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml 
 #&& kubectl apply -f ../issuer_prod.yaml 
 #&& kubectl apply -f ../issuer_staging.yaml"
