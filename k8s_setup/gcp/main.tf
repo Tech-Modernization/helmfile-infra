@@ -189,10 +189,10 @@ resource "kubernetes_cluster_role_binding" "helm" {
 }
 
 
-resource "kubernetes_manifest" "test-configmap" {
-  provider = kubernetes-alpha
-  manifest = "$file(../cert-manager-certificaterequests.tf)"
-}
+#resource "kubernetes_manifest" "test-configmap" {
+#  provider = kubernetes-alpha
+#  manifest = "$file(../cert-manager-certificaterequests.tf)"
+#}
 
 #cert-manager-certificaterequests.tf
 #cert-manager-challenges.tf

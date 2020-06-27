@@ -31,7 +31,7 @@ variable "master_authorized_networks" {
   default     = []
 }
 
-varialbe "admin_ueer" {
+varialbe "admin_user" {
   type        = string
   description = "cluster admin user (email)"
   default     = "bill.hood@dexcom.com"
