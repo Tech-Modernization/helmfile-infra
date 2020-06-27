@@ -38,7 +38,7 @@ module "gke-network" {
 }
   
 module "gke" {
-  source                 = "terraform-google-modules/kubernetes-engine"
+  source                 = "terraform-google-modules/kubernetes-engine/google"
   project_id             = data.google_client_config.current.project
   name                   = var.cluster_name
   regional               = true
@@ -48,9 +48,7 @@ module "gke" {
   ip_range_pods          = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
   ip_range_services      = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
   create_service_account = true
-}
         
-#module "gke" {
 #  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
 #  project_id                        = data.google_client_config.current.project
 #  name                              = var.cluster_name
@@ -78,50 +76,51 @@ module "gke" {
 #      display_name = "ALL"
 #    },
 #  ]
-#  node_pools = [
-#    {
-#      name               = "my-node-pool"
-#      machine_type       = "n1-standard-1"
-#      min_count          = 1
-#      max_count          = 1
-#      disk_size_gb       = 100
-#      disk_type          = "pd-ssd"
-#      image_type         = "COS"
-#      auto_repair        = true
-#      auto_upgrade       = false
-#      preemptible        = false
-#      initial_node_count = 1
-#    },
-#  ]
-#  node_pools_oauth_scopes = {
-#    all = [
-#      "https://www.googleapis.com/auth/trace.append",
-#      "https://www.googleapis.com/auth/service.management.readonly",
-#      "https://www.googleapis.com/auth/monitoring",
-#      "https://www.googleapis.com/auth/devstorage.read_only",
-#      "https://www.googleapis.com/auth/servicecontrol",
-#    ]
-#    my-node-pool = [
-#      "https://www.googleapis.com/auth/trace.append",
-#      "https://www.googleapis.com/auth/service.management.readonly",
-#      "https://www.googleapis.com/auth/monitoring",
-#      "https://www.googleapis.com/auth/devstorage.read_only",
-#      "https://www.googleapis.com/auth/servicecontrol",
-#    ]
-#  }
-#  node_pools_labels = {
-#    all = {}
-#    my-node-pool = {}
-#  }
-#  node_pools_metadata = {
-#    all = {}
-#    my-node-pool = {}
-#  }
-#  node_pools_tags = {
-#    all = []
-#    my-node-pool = []
-#  }
-#}
+
+    node_pools = [
+    {
+      name               = "my-node-pool"
+      machine_type       = "n1-standard-1"
+      min_count          = 1
+      max_count          = 1
+      disk_size_gb       = 100
+      disk_type          = "pd-ssd"
+      image_type         = "COS"
+      auto_repair        = true
+      auto_upgrade       = false
+      preemptible        = false
+      initial_node_count = 1
+    },
+  ]
+  node_pools_oauth_scopes = {
+    all = [
+      "https://www.googleapis.com/auth/trace.append",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/servicecontrol",
+    ]
+    my-node-pool = [
+      "https://www.googleapis.com/auth/trace.append",
+      "https://www.googleapis.com/auth/service.management.readonly",
+      "https://www.googleapis.com/auth/monitoring",
+      "https://www.googleapis.com/auth/devstorage.read_only",
+      "https://www.googleapis.com/auth/servicecontrol",
+    ]
+  }
+  node_pools_labels = {
+    all = {}
+    my-node-pool = {}
+  }
+  node_pools_metadata = {
+    all = {}
+    my-node-pool = {}
+  }
+  node_pools_tags = {
+    all = []
+    my-node-pool = []
+  }
+}
       
 resource "kubernetes_namespace" "cert-manager" {
   metadata { name = "cert-manager" }
