@@ -8,13 +8,6 @@ resource "google_project_service" "service" {
 data "google_client_config" "current" {
 }
 
-# you must handle dns subdomain wildcard for ingress on your own
-
-data "google_container_cluster" "primary" {
-  name = var.cluster_name
-  location = data.google_client_config.current.region
-}
-
 module "gke-network" {
   source       = "terraform-google-modules/network/google"
   version      = "~> 2.0"
