@@ -13,13 +13,14 @@ module "gke-network" {
   version      = "~> 2.0"
   project_id   = data.google_client_config.current.project
   network_name = var.network_name
-  private_ip_google_access = false
 
   subnets = [
     {
       subnet_name   = "random-gke-subnet"
       subnet_ip     = "10.0.0.0/24"
       subnet_region = data.google_client_config.current.region
+      subnet_private_access	= false
+      subnet_flow_logs = true
     },
   ]
 
