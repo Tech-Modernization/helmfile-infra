@@ -38,6 +38,7 @@ module "gke-network" {
 }
   
 module "gke" {
+  count                  = 0
   source                 = "terraform-google-modules/kubernetes-engine/google"
   project_id             = data.google_client_config.current.project
   name                   = var.cluster_name
