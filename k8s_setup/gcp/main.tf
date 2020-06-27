@@ -38,32 +38,26 @@ module "gke-network" {
 }
   
 module "gke" {
-  count                  = 0
-  source                 = "terraform-google-modules/kubernetes-engine/google"
-  project_id             = data.google_client_config.current.project
-  name                   = var.cluster_name
-  regional               = true
-  region                 = data.google_client_config.current.region
-  network                = module.gke-network.network_name
-  subnetwork             = module.gke-network.subnets_names[0]
-  ip_range_pods          = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
-  ip_range_services      = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
+  #source                 = "terraform-google-modules/kubernetes-engine/google"
+  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+
+  project_id                        = data.google_client_config.current.project
+  name                              = var.cluster_name
+  region                            = data.google_client_config.current.region
+  regional                          = true
+  network                           = module.gke-network.network_name
+  subnetwork                        = module.gke-network.subnets_names[0]
+  ip_range_pods                     = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
+  ip_range_services                 = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
+
+  enable_private_endpoint           = false
+  enable_private_nodes              = true
+  master_ipv4_cidr_block            = "172.16.0.16/28"
+  network_policy                    = true
+  horizontal_pod_autoscaling        = true
+
   create_service_account = true
-        
-#  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
-#  project_id                        = data.google_client_config.current.project
-#  name                              = var.cluster_name
-#  region                            = data.google_client_config.current.region
-#  regional                          = true
-#  network                           = module.gke-network.network_name
-#  subnetwork                        = module.gke-network.subnets_names[0]
-#  ip_range_pods                     = module.gke-network.subnets_secondary_ranges[0].*.range_name[0]
-#  ip_range_services                 = module.gke-network.subnets_secondary_ranges[0].*.range_name[1]
-#  enable_private_endpoint           = false
-#  enable_private_nodes              = false
-#  master_ipv4_cidr_block            = "172.16.0.16/28"
-#  network_policy                    = true
-#  horizontal_pod_autoscaling        = true
+
 #  service_account                   = "create"
 #  remove_default_node_pool          = true
 #  disable_legacy_metadata_endpoints = true
