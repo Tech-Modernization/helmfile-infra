@@ -176,18 +176,6 @@ resource "kubernetes_cluster_role_binding" "helm" {
   }
 }
 
-resource "null_resource" "import" {
-  triggers = {
-    always_run = "${timestamp()}"
-    #run = kubernetes_namespace.cert-manager.uid
-  }
-  provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${data.google_client_config.current.region} --project ${data.google_client_config.current.project} && kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f ../issuer_prod.yaml && kubectl apply -f ../issuer_staging.yaml"
-
-  }
-  depends_on = [module.gke.ca_certificate]
-}
-
-output "get-creds" {
- value = "gcloud container clusters get-credentials ${var.cluster_name} --zone ${data.google_client_config.current.region} --project ${data.google_client_config.current.project}"
-}
+#kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml 
+#&& kubectl apply -f ../issuer_prod.yaml 
+#&& kubectl apply -f ../issuer_staging.yaml"
