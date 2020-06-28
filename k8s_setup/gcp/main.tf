@@ -55,8 +55,7 @@ module "gke" {
   master_ipv4_cidr_block            = "172.16.0.16/28"
   network_policy                    = true
   horizontal_pod_autoscaling        = true
-
-  create_service_account = true
+  create_service_account            = true
 
 #  service_account                   = "create"
 #  remove_default_node_pool          = true
@@ -87,24 +86,24 @@ module "gke" {
       initial_node_count = 1
     },
   ]
-  node_pools_oauth_scopes = {
-    all = [
-      "https://www.googleapis.com/auth/trace.append",
-      "https://www.googleapis.com/auth/service.management.readonly",
-      "https://www.googleapis.com/auth/monitoring",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/servicecontrol",
-      "https://www.googleapis.com/auth/logging.write",
-    ]
-    my-node-pool = [
-      "https://www.googleapis.com/auth/trace.append",
-      "https://www.googleapis.com/auth/service.management.readonly",
-      "https://www.googleapis.com/auth/monitoring",
-      "https://www.googleapis.com/auth/devstorage.read_only",
-      "https://www.googleapis.com/auth/servicecontrol",
-      "https://www.googleapis.com/auth/logging.write",
-    ]
-  }
+#  node_pools_oauth_scopes = {
+#    all = [
+#      "https://www.googleapis.com/auth/trace.append",
+#      "https://www.googleapis.com/auth/service.management.readonly",
+#      "https://www.googleapis.com/auth/monitoring",
+#      "https://www.googleapis.com/auth/devstorage.read_only",
+#      "https://www.googleapis.com/auth/servicecontrol",
+#      "https://www.googleapis.com/auth/logging.write",
+#    ]
+#    my-node-pool = [
+#      "https://www.googleapis.com/auth/trace.append",
+#      "https://www.googleapis.com/auth/service.management.readonly",
+#      "https://www.googleapis.com/auth/monitoring",
+#      "https://www.googleapis.com/auth/devstorage.read_only",
+#      "https://www.googleapis.com/auth/servicecontrol",
+#      "https://www.googleapis.com/auth/logging.write",
+#    ]
+#  }
   node_pools_labels = {
     all = {}
     my-node-pool = {}
