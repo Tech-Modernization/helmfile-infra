@@ -33,7 +33,7 @@ gcloud iam service-accounts keys create ${TF_CREDS} --iam-account terraform@${TF
 
 * Add sandbox project owner role to terraform sa
 
-* Download credentials for the project https://console.cloud.google.com/apis/credentials?project=dexcom-sandbox-20200626144235&organizationId=78200021690
+* Create/download credentials for the project https://console.cloud.google.com/apis/credentials?project=dexcom-sandbox-20200626144235&organizationId=78200021690
 
 # Deploy TF project to create private GKE in project
 * https://app.terraform.io/
@@ -43,8 +43,8 @@ gcloud iam service-accounts keys create ${TF_CREDS} --iam-account terraform@${TF
 * ENV variables
 ** GOOGLE_REGION=us-west1
 ** GOOGLE_PROJECT=dexcom-sandbox-20200626144235
-** GOOGLE_CREDENTIALS= 
-* run and apply
+** GOOGLE_CREDENTIALS= <<FILL IN SA CREDENTIALS DOWNLOAD ABOVE WITH NO CR>>
+* plan and apply
 
 # Deploy TF project to setup GKE project (cluster admin, namespaces)
 * https://app.terraform.io/
@@ -53,12 +53,15 @@ gcloud iam service-accounts keys create ${TF_CREDS} --iam-account terraform@${TF
 * ENV variables
 ** GOOGLE_REGION=us-west1
 ** GOOGLE_PROJECT=dexcom-sandbox-20200626144235
-** GOOGLE_CREDENTIALS= 
-* run and apply
+** GOOGLE_CREDENTIALS= <<FILL IN SA CREDENTIALS DOWNLOAD ABOVE WITH NO CR>>
+* plan and apply
  
 # Run helmfile
-* gcloud container clusters get-credentials gcp --region us-west1 --project dexcom-sandbox-20200626144235
-* helmfile -e gcp apply
+On client with normal helmfile setup:
+```bash
+gcloud container clusters get-credentials gcp --region us-west1 --project dexcom-sandbox-20200626144235
+helmfile -e gcp apply
+```
 
 # Post helmfile
 * Manually register the nginx-ingress public IP with DNS
