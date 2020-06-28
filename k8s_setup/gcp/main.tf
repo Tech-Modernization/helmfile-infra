@@ -37,11 +37,21 @@ module "gke-network" {
   ] }
 }
 
-module "nat" {
-  source     = "GoogleCloudPlatform/nat-gateway/google"
+resource "google_compute_router" "router" {
+  name    = "my-router"
+  region  = data.google_client_config.current.region
+  network = module.gke-network.network_self_link
+  bgp {
+    asn = 64514
+  }
+}
+
+module "cloud-nat" {
+  source     = "terraform-google-modules/cloud-nat/google"
+  version    = "~> 1.2"
+  project_id = data.google_client_config.current.project
   region     = data.google_client_config.current.region
-  network    = module.gke-network.network_name
-  subnetwork = module.gke-network.subnets_names[0]
+  router     = google_compute_router.router.name
 }
 
   
@@ -121,8 +131,8 @@ module "gke" {
     my-node-pool = {}
   }
   node_pools_tags = {
-    all =  ["${module.nat.routing_tag_regional}"]
-    my-node-pool = ["${module.nat.routing_tag_regional}"]
+    all =  []
+    my-node-pool = []
   }
 }
       
