@@ -70,11 +70,14 @@ Note that kubens, kubectx and other k8s tools might impact usage.
 
 Alternatively, the helmfile --kube-context can be used to specify credentials.
 
-For gcp, you can setup k8s eks credentials using a command like:
+For gcp, you can setup k8s gke credentials using a command like:
 
 ```bash
 gcloud container clusters get-credentials acme --zone us-central1-c --project bhood-214523
 ```
+
+## k8s setup
+Terraform to setup k8s cluster is under k8s_setup and uses [terraformcloud.md](terraformcloud.md)
 
 ## Usage
 All required helm charts and configurations are defined in helmfile.yaml.  You must specify the environment using -e or --environment flag.
