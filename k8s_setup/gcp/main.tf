@@ -36,6 +36,14 @@ module "gke-network" {
       },
   ] }
 }
+
+module "nat" {
+  source     = "GoogleCloudPlatform/nat-gateway/google"
+  region     = data.google_client_config.current.region
+  network    = module.gke-network.network_name
+  subnetwork = module.gke-network.subnets_names[0]
+}
+
   
 module "gke" {
   #source                 = "terraform-google-modules/kubernetes-engine/google"
@@ -113,8 +121,8 @@ module "gke" {
     my-node-pool = {}
   }
   node_pools_tags = {
-    all = []
-    my-node-pool = []
+    all =  ["${module.nat.routing_tag_regional}"]
+    my-node-pool = ["${module.nat.routing_tag_regional}"]
   }
 }
       
