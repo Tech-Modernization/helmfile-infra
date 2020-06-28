@@ -1,4 +1,4 @@
-# Use Terraform cloud to setup Kubernetes for this project
+# Terraform cloud on GCP
 
 * Create project/serviceaccount
 * Create Terraform Cloud account at https://app.terraform.io/
