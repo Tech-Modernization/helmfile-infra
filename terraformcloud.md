@@ -1,25 +1,22 @@
 # Use Terraform cloud to setup Kubernetes for this project
 
-* Create project (we focus on sandbox GCP)
-* Terraform serviceaccount
+* Create project/serviceaccount
 * Create Terraform Cloud account at https://app.terraform.io/
 * Deploy TF project to create private GKE in project
 * Deploy TF project to setup GKE project (cluster admin, namespaces)
 * Run helmfile
 * post helmfile steps
 
-# Create Project
+# Create project/serviceaccount
 
-In GCP cloud shell
+For Sandbox project, use GCP cloud shell:
 
 ```bash
 curl https://us-central1-it-devops.cloudfunctions.net/dexcom-sandbox-create -H "Author
 ization: bearer $(gcloud auth print-identity-token)"
-dexcom-sandbox-20200626144235
-```
 
-# Terraform serviceaccount
-```bash
+dexcom-sandbox-20200626144235
+
 gcloud init
 gcloud services enable iam.googleapis.com
 gcloud services enable compute.googleapis.com
@@ -34,9 +31,9 @@ gcloud iam service-accounts create terraform --display-name "Terraform admin acc
 gcloud iam service-accounts keys create ${TF_CREDS} --iam-account terraform@${TF_ADMIN}.iam.gserviceaccount.com
 ```
 
-Add sandbox project owner role to terraform sa
+* Add sandbox project owner role to terraform sa
 
-Download credentials for the project https://console.cloud.google.com/apis/credentials?project=dexcom-sandbox-20200626144235&organizationId=78200021690
+* Download credentials for the project https://console.cloud.google.com/apis/credentials?project=dexcom-sandbox-20200626144235&organizationId=78200021690
 
 # Deploy TF project to create private GKE in project
 * https://app.terraform.io/
