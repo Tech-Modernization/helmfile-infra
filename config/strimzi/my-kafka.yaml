@@ -181,6 +181,17 @@ spec:
   partitions: 3
   replicas: 1
 ---
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: my-topic2
+  namespace: my-kafka-project
+  labels:
+    strimzi.io/cluster: "my-cluster"
+spec:
+  partitions: 3
+  replicas: 1
+---
 apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaBridge
 metadata:
