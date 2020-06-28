@@ -9,11 +9,13 @@ data "google_container_cluster" "my_cluster" {
 }
 
 resource "kubernetes_namespace" "namespace" {
-  count   = length(var.namespaces)
+  count = 0
+  #count   = length(var.namespaces)
   metadata { name = element(var.namespaces, count.index) }
 }
 
 resource "kubernetes_cluster_role_binding" "admin" {
+  count = 0
   metadata {
     name = "admin"
   }
