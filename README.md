@@ -215,6 +215,7 @@ The myapp-prometheus-operator standard alerts includes ***PrometheusNotConnected
 SLO dashboards are generated using jsonnet using a IaC approach.  
 helmfile hooks trigger generation of prometheus rules, prometheus alerts, and grafana dashboards for **kubeapi** and **myappapi** specs, and these are deployed to prometheus.
 A standardized RED method (Request Rate, Errors, Duration) using a data-driven IaC approach based on https://github.com/bitnami-labs/kubernetes-grafana-dashboards
+
 See [JSONNET.md](JSONNET.md) for more info
 
 ## Sonarqube
@@ -258,8 +259,7 @@ kubectl exec -ti -n vault vault-0 -- vault operator unseal  XXXX
 * postsync install CRD for kafka cluster and topic in namespace my-kafka-project
 * NOTE: must manually add secret with prometheus config for strimzi or prometheus will not start
  kubectl create secret generic prometheus-operator-prometheus-scrape-confg  --from-file=additional-scrape-configs.yaml -n prometheus
-
-
+* See [strimzi.md](strimzi.md) for more info
 
 ## References
 * Helm (https://helm.sh/docs/helm/)
