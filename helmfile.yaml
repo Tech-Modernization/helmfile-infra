@@ -56,27 +56,39 @@ releases:
  - name: cert-manager
    namespace: cert-manager
    chart: jetstack/cert-manager
-   version: 0.14.0
+   version: 0.15.1
+   hooks:
+     - events: ["prepare"]
+       showlogs: true
+       command: "kubectl"
+       args: ["apply", "-f", "https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.crds.yaml" ]
+     - events: ["prepare"]
+       showlogs: true
+       command: "kubectl"
+       args: ["apply", "-f", "k8s_setup/issuer_prod.yaml" ]
+     - events: ["prepare"]
+       showlogs: true
+       command: "kubectl"
+       args: ["apply", "-f", "k8s_setup/issuer_staging.yaml" ]
 
- - name: etcd-operator
-   namespace: vault
-   chart: stable/etcd-operator
-   version: 0.10.3
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-# run only once here or as part of cluster setup (or just manual for now) 
-#   hooks:
-#     - events: ["prepare"]
-#       showlogs: true
-#       command: "./tls/setup-etcd.sh"
- - name: vault
-   namespace: vault
-   chart: ./charts/vault-helm-0.5.0
-   version: 0.5.0
-   values:
-     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+# - name: etcd-operator
+#   namespace: vault
+#   chart: stable/etcd-operator
+#   version: 0.10.3
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+## run only once here or as part of cluster setup (or just manual for now) 
+##   hooks:
+##     - events: ["prepare"]
+##       showlogs: true
+##       command: "./tls/setup-etcd.sh"
+# - name: vault
+#   namespace: vault
+#   chart: ./charts/vault-helm-0.5.0
+#   version: 0.5.0
+#   values:
+#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
 
-## TODO, remove this
 {{ if eq .Environment.Name "gcp" }}
  - name: prometheus-operator
    namespace: prometheus
@@ -92,26 +104,31 @@ releases:
        showlogs: true
        command: "./jsonnet.sh"
        args: ["{{`{{.Release.Name}}`}}", "kubeapi"]
+     - events: ["prepare"]
+       showlogs: true
+       command: "kubectl"
+       #args: ["create", "secret", "generic", "prometheus-operator-prometheus-scrape-confg", "--from-file=resources/additional-scrape-configs.yaml", "-n", "prometheus" ]
+       args: ["apply", "-f", "resources/prometheus-operator-prometheus-scrape-confg.yaml" ]
 {{ end }}
 
-# - name: myapp-prometheus-operator
-#   namespace: myapp-prometheus
-#   chart: stable/prometheus-operator
-#   #version: 6.0.0
-#   version: 8.12.1
-#   values:
-#     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
-#     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml.gotmpl
-#     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
-#   hooks:
-#     - events: ["prepare"]
-#       showlogs: true
-#       command: "./jsonnet.sh"
-#       args: ["{{`{{.Release.Name}}`}}", "myappapi"]
-##      args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
-##       command: "echo kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml"
-####     command: "kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml | kubectl apply -f -"
-##       #args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
+ - name: myapp-prometheus-operator
+   namespace: myapp-prometheus
+   chart: stable/prometheus-operator
+   #version: 6.0.0
+   version: 8.12.1
+   values:
+     - config/{{`{{ .Release.Name }}`}}/values.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/values-additionalPrometheusRules.yaml.gotmpl
+     - config/{{`{{ .Release.Name }}`}}/{{`{{ .Environment.Name }}`}}.yaml.gotmpl
+   hooks:
+     - events: ["prepare"]
+       showlogs: true
+       command: "./jsonnet.sh"
+       args: ["{{`{{.Release.Name}}`}}", "myappapi"]
+#      args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
+#       command: "echo kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml"
+###     command: "kubectl create configmap extra-configmap --namespace=myapp-prometheus --from-file=resources/extra --dry-run=true -o yaml | kubectl apply -f -"
+#       #args: ["{{`{{.Environment.Name}}`}}", "{{`{{.Release.Name}}`}}", "{{`{{.HelmfileCommand}}`}}\ "]
 
 # - name: prometheus-pushgateway
 #   namespace: prometheus
@@ -178,10 +195,10 @@ releases:
        command: "kubectl"
        args: ["create", "-f", "config/{{`{{.Release.Name}}`}}/my-kafka.yaml"]
 
- - name: twistlock-defender
-   namespace: twistlock
-   chart: ./charts/twistlock-defender
-   version: 19.11.506
+# - name: twistlock-defender
+#   namespace: twistlock
+#   chart: ./charts/twistlock-defender
+#   version: 19.11.506
 
  - name: atlantis
    namespace: devops
