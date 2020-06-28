@@ -45,6 +45,9 @@ gcloud iam service-accounts keys create ${TF_CREDS} --iam-account terraform@${TF
 ** GOOGLE_PROJECT=dexcom-sandbox-20200626144235
 ** GOOGLE_CREDENTIALS= <<FILL IN SA CREDENTIALS DOWNLOAD ABOVE WITH NO CR>>
 * plan and apply
+ 
+ ![dashboard](terraformcloud_environment.png "environment")
+
 
 # Deploy TF project to setup GKE project (cluster admin, namespaces)
 * https://app.terraform.io/
