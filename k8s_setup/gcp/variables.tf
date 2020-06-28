@@ -30,9 +30,3 @@ variable "master_authorized_networks" {
   description = "List of master authorized networks. If none are provided, disallow external access (except the cluster node IPs, which GKE automatically whitelists)."
   default     = []
 }
-
-variable "admin_user" {
-  type        = string
-  description = "cluster admin user (email)"
-  default     = "bill.hood@dexcom.com"
-}
