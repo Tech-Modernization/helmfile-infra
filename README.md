@@ -36,6 +36,8 @@ is driven by files in git such as changes to yaml values files.
 
 Additional kubernetes cluster including on-prem Anthos, Azure, AWS and others can be accommodated with minimal effort.
 
+Instructions are provided on setuping up k8s cluster using [terraformcloud.md](terraformcloud.md)
+
 ## Prerequisites (mac)
 
 ```bash
@@ -75,9 +77,6 @@ For gcp, you can setup k8s gke credentials using a command like:
 ```bash
 gcloud container clusters get-credentials acme --zone us-central1-c --project bhood-214523
 ```
-
-## k8s setup
-Terraform to setup k8s cluster is under k8s_setup and uses [terraformcloud.md](terraformcloud.md)
 
 ## Usage
 All required helm charts and configurations are defined in helmfile.yaml.  You must specify the environment using -e or --environment flag.
