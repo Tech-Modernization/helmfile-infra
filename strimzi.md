@@ -43,10 +43,10 @@ kubectl run kafka-producer -ti --image=strimzi/kafka:latest-kafka-2.5.0 --rm=tru
 
 ```
 
-# Kafka Brdige
+# Kafka Brdige Demo
 ```bash
 curl -X POST \
-  https://bridge.gcp.continotb.com/topics/my-topic \
+  https://bridge.gcp.continotb.com/topics/my-topic2 \
   -H 'content-type: application/vnd.kafka.json.v2+json' \
   -d '{
     "records": [
@@ -61,24 +61,24 @@ curl -X POST \
     ]
 }'
 
-curl -X POST https://bridge.gcp.continotb.com/consumers/my-group \
+curl -X POST https://bridge.gcp.continotb.com/consumers/my-group2 \
   -H 'content-type: application/vnd.kafka.v2+json' \
   -d '{
-    "name": "my-consumer",
+    "name": "my-consumer2",
     "format": "json",
     "auto.offset.reset": "earliest",
     "enable.auto.commit": false
   }'
   
-curl -X POST https://bridge.gcp.continotb.com:443/consumers/my-group/instances/my-consumer/subscription \
+curl -X POST https://bridge.gcp.continotb.com:443/consumers/my-group/instances/my-consumer2/subscription \
   -H 'content-type: application/vnd.kafka.v2+json' \
   -d '{
     "topics": [
-        "my-topic"
+        "my-topic2"
     ]
 }'
 
-curl -X GET https://bridge.gcp.continotb.com:443/consumers/my-group/instances/my-consumer/records \
+curl -X GET https://bridge.gcp.continotb.com:443/consumers/my-group/instances/my-consumer2/records \
   -H 'accept: application/vnd.kafka.json.v2+json'
   
 ```
