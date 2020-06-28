@@ -109,7 +109,11 @@ releases:
        command: "kubectl"
        #args: ["create", "secret", "generic", "prometheus-operator-prometheus-scrape-confg", "--from-file=resources/additional-scrape-configs.yaml", "-n", "prometheus" ]
        args: ["apply", "-f", "resources/prometheus-operator-prometheus-scrape-confg.yaml" ]
+     - events: ["postsync"]
+       showlogs: true
+       command: "resource/loadall.sh" 
 {{ end }}
+
 
  - name: myapp-prometheus-operator
    namespace: myapp-prometheus
