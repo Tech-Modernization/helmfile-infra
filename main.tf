@@ -39,11 +39,12 @@ resource "kubernetes_cluster_role_binding" "admin" {
 #  manifest = "$file(../cert-manager-certificaterequests.tf)"
 #}
 
-#resource "null_resource" "certmanagerapply" {
-#  triggers = {
-#    always_run = "${timestamp()}"
-#  }
-#  provisioner "local-exec" {
-#    command = "kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f k8s_setup/issuer_prod.yaml && kubectl apply -f k8s_setup/issuer_staging.yaml"
-#  }
-#}
+resource "null_resource" "certmanagerapply" {
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    command = "echo later"
+    #command = "kubectl apply --validate=false -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.14/deploy/manifests/00-crds.yaml && kubectl apply -f k8s_setup/issuer_prod.yaml && kubectl apply -f k8s_setup/issuer_staging.yaml"
+  }
+}
