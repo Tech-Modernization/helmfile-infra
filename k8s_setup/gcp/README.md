@@ -5,7 +5,7 @@ Creates infrastructure for running GKE in private GCP Sandbox from terraform clo
 * private GKE (private nodes, public kubernetes API)
 * Router and CloudNAT to get out to public internet
 
-See terraformcloud.md for details
+See instructions for [../../terraformcloud.md](terraformcloud.md) setup
 
 
 # gke env setup for helmfile-infra with GCP Trial Account (OLD)
