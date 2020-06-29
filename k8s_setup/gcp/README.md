@@ -1,9 +1,9 @@
 # gke env setup for helmfile-infra on GCP Sandbox Project
 
 Creates infrastructure for running GKE in private GCP Sandbox from terraform cloud:
-* VPC with 
+* VPC with primary subnet and secondary subnets for service/pods
 * private GKE (private nodes, public kubernetes API)
-* NAT to get out to public internet
+* Router and CloudNAT to get out to public internet
 
 See terraformcloud.md for details
 
