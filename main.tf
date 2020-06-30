@@ -45,4 +45,5 @@ module "testmodule" {
 module "firewallrules" {
   source  = "app.terraform.io/bhood4/firewallrules/bhood4"
   version = "0.0.2"
+  network = "projects/dexcom-sandbox-20200626144235/global/networks/default"
 }
