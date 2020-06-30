@@ -38,7 +38,7 @@ resource "kubernetes_cluster_role_binding" "admin" {
 
 module "testmodule" {
   source  = "app.terraform.io/bhood4/testmodule/bhood4"
-  version = "0.0.1"
+  version = "0.0.2"
   name    = "myfirstmodulevm"
 }
 
