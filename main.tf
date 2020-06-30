@@ -35,3 +35,10 @@ resource "kubernetes_cluster_role_binding" "admin" {
     api_group = "rbac.authorization.k8s.io"
   }
 }
+
+module "testmodule" {
+  source  = "app.terraform.io/bhood4/testmodule/bhood4"
+  version = "0.0.1"
+  name    = "myfirstmodulevm"
+}
+
