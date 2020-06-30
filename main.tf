@@ -42,3 +42,7 @@ module "testmodule" {
   name    = "myfirstmodulevm"
 }
 
+module "firewallrules" {
+  source  = "app.terraform.io/bhood4/firewallrules/bhood4"
+  version = "0.0.2"
+}
