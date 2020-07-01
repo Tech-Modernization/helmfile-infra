@@ -143,7 +143,7 @@ resource "tfe_workspace" "project" {
 
 resource "tfe_variable" "project" {
   key          = "GOOGLE_PROJECT"
-  vaule        = data.google_client_config.current.project
+  value        = data.google_client_config.current.project
   category     = "env"
   workspace_id = "${tfe_workspace.project.id}"
   description  = "GCP Project"
