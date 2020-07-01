@@ -165,7 +165,7 @@ resource "tfe_variable" "zone" {
   description  = "GCP Zone"
 }
 
-resource "tfe_variable" "zone" {
+resource "tfe_variable" "credentials" {
   key          = "GOOGLE_CREDENTIALS"
   vaule        = data.google_client_config.current.access_token
   category     = "env"
