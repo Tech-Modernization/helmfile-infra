@@ -135,3 +135,8 @@ module "gke" {
     my-node-pool = []
   }
 }
+
+resource "tfe_workspace" "test" {
+  organization = "bhood4"
+  name         = data.google_client_config.current.project
+}
