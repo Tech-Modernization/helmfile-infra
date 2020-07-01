@@ -145,7 +145,7 @@ resource "tfe_variable" "project" {
   key          = "GOOGLE_PROJECT"
   value        = data.google_client_config.current.project
   category     = "env"
-  workspace_id = "${tfe_workspace.project.id}"
+  workspace_id = tfe_workspace.project.id
   description  = "GCP Project"
 }
 
@@ -153,7 +153,7 @@ resource "tfe_variable" "region" {
   key          = "GOOGLE_REGION"
   value        = data.google_client_config.current.region
   category     = "env"
-  workspace_id = "${tfe_workspace.project.id}"
+  workspace_id = tfe_workspace.project.id
   description  = "GCP Region"
 }
 
@@ -161,7 +161,7 @@ resource "tfe_variable" "zone" {
   key          = "GOOGLE_ZONE"
   value        = data.google_client_config.current.zone
   category     = "env"
-  workspace_id = "${tfe_workspace.project.id}"
+  workspace_id = tfe_workspace.project.id
   description  = "GCP Zone"
 }
 
@@ -170,6 +170,6 @@ resource "tfe_variable" "credentials" {
   value        = data.google_client_config.current.access_token
   category     = "env"
   sensitive    = true
-  workspace_id = "${tfe_workspace.project.id}"
+  workspace_id = tfe_workspace.project.id
   description  = "GCP access token"
 }
