@@ -136,7 +136,40 @@ module "gke" {
   }
 }
 
-resource "tfe_workspace" "test" {
+resource "tfe_workspace" "project" {
   organization = "bhood4"
   name         = data.google_client_config.current.project
+}
+
+resource "tfe_variable" "project" {
+  key          = "GOOGLE_PROJECT"
+  vaule        = data.google_client_config.current.project
+  category     = "env"
+  workspace_id = "${tfe_workspace.project.id}"
+  description  = "GCP Project"
+}
+
+resource "tfe_variable" "region" {
+  key          = "GOOGLE_REGION"
+  vaule        = data.google_client_config.current.region
+  category     = "env"
+  workspace_id = "${tfe_workspace.project.id}"
+  description  = "GCP Region"
+}
+
+resource "tfe_variable" "zone" {
+  key          = "GOOGLE_ZONE"
+  vaule        = data.google_client_config.current.zone
+  category     = "env"
+  workspace_id = "${tfe_workspace.project.id}"
+  description  = "GCP Zone"
+}
+
+resource "tfe_variable" "zone" {
+  key          = "GOOGLE_CREDENTIALS"
+  vaule        = data.google_client_config.current.access_token
+  category     = "env"
+  sensitive    = true
+  workspace_id = "${tfe_workspace.project.id}"
+  description  = "GCP access token"
 }
