@@ -162,11 +162,11 @@ resource "tfe_variable" "region" {
   description  = "GCP Region"
 }
 
-#resource "tfe_variable" "credentials" {
-#  key          = "GOOGLE_CREDENTIALS"
-#  value        = module.gke.access_token
-#  category     = "env"
-#  sensitive    = true
-#  workspace_id = tfe_workspace.project.id
-#  description  = "GCP access token"
-#}
+resource "tfe_variable" "credentials" {
+  key          = "GOOGLE_CREDENTIALS"
+  value        = data.google_client_config.access_token
+  category     = "env"
+  sensitive    = true
+  workspace_id = tfe_workspace.project.id
+  description  = "GCP access token"
+}
