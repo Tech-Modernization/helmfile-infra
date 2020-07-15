@@ -359,6 +359,7 @@ gcloud compute firewall-rules create allow-apiserver-to-admission-webhook-8443 \
 - [x] ingress
 - [x] cert-manager
 - [x] k8s_setup with terraform to create GKE cluster in trial account
+- [ ] Terrraform cloud for gcp
 - [ ] Dockerfile
 - [ ] example app (webGoat)?
 - [ ] helmfile operator https://github.com/mumoshu/helmfile-operator or https://github.com/fluxcd/helm-operator
