@@ -15,7 +15,7 @@ module "gke-network" {
 
   subnets = [
     {
-      subnet_name   = "random-gke-subnet"
+      subnet_name   = "${var.network_name}-gke-subnet"
       subnet_ip     = "10.0.0.0/24"
       subnet_region = data.google_client_config.current.region
       subnet_private_access	= true
@@ -26,11 +26,11 @@ module "gke-network" {
   secondary_ranges = {
     "random-gke-subnet" = [
       {
-        range_name    = "random-ip-range-pods"
+        range_name    = "${var.network_name}-ip-range-pods"
         ip_cidr_range = "10.1.0.0/16"
       },
       {
-        range_name    = "random-ip-range-services"
+        range_name    = "${var.network_name}-ip-range-services"
         ip_cidr_range = "10.2.0.0/20"
       },
   ] }
