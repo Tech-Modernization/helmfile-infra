@@ -47,3 +47,8 @@ resource "kubernetes_cluster_role_binding" "admin" {
 #  version = "0.0.4"
 #  network = "projects/dexcom-sandbox-20200626144235/global/networks/default"
 #}
+
+resource "helmfile_release_set" "mystack" {
+    content = file("./helmfile.yaml")
+    environment = "gcp"
+}
