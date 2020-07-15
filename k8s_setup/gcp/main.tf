@@ -4,7 +4,7 @@ resource "google_project_service" "service" {
   count   = length(var.project_services)
   project = data.google_client_config.current.project
   service = element(var.project_services, count.index)
-  #disable_on_destroy = false
+  disable_on_destroy = false
   disable_dependent_services = true
 }
 
@@ -58,6 +58,8 @@ module "cloud-nat" {
 module "gke" {
   #source                 = "terraform-google-modules/kubernetes-engine/google"
   source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+
+  # depends_on = [ "google_project_service.service" ]
 
   project_id                        = data.google_client_config.current.project
   name                              = var.cluster_name
@@ -141,10 +143,10 @@ module "gke" {
 resource "tfe_workspace" "project" {
   organization = "bhood4"
   name         = data.google_client_config.current.project
-#  vcs_repo block {
-#    identifier = "contino/helmfile-infra"
-#  #  oauth_token_id - "TODO"
-#  }
+  vcs_repo {
+    identifier = "contino/helmfile-infra"
+    oauth_token_id = "TODO"
+  }
 }
 
 resource "tfe_variable" "project" {
