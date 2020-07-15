@@ -5,6 +5,7 @@ resource "google_project_service" "service" {
   project = data.google_client_config.current.project
   service = element(var.project_services, count.index)
   #disable_on_destroy = false
+  disable_dependent_services = true
 }
 
 module "gke-network" {
