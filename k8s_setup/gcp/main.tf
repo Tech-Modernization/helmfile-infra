@@ -141,7 +141,7 @@ module "gke" {
 resource "tfe_workspace" "project" {
   organization = "bhood4"
   name         = data.google_client_config.current.project
-  vcs_repo block = {
+  vcs_repo block {
     identifier = "contino/helmfile-infra"
   #  oauth_token_id - "TODO"
   }
