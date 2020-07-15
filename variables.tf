@@ -24,5 +24,5 @@ variable "namespaces" {
 variable "admin_user" {
   type        = string
   description = "cluster admin user (email)"
-  default     = "bill.hood@dexcom.com"
+  default     = "bill.hood@contino.io"
 }
