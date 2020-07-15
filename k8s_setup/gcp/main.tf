@@ -24,7 +24,7 @@ module "gke-network" {
   ]
 
   secondary_ranges = {
-    "random-gke-subnet" = [
+    "${var.network_name}-gke-subnet" = [
       {
         range_name    = "${var.network_name}-ip-range-pods"
         ip_cidr_range = "10.1.0.0/16"
@@ -164,7 +164,7 @@ resource "tfe_variable" "region" {
 
 resource "tfe_variable" "credentials" {
   key          = "GOOGLE_CREDENTIALS"
-  value        = data.google_client_config.access_token
+  value        = data.google_client_config.current.access_token
   category     = "env"
   sensitive    = true
   workspace_id = tfe_workspace.project.id
