@@ -153,11 +153,6 @@ resource "tfe_workspace" "project" {
   }
 }
 
-vcs_repo {
-          - identifier         = "contino/helmfile-infra" -> null
-          - ingress_submodules = false -> null
-        }
-
 resource "tfe_variable" "project" {
   key          = "GOOGLE_PROJECT"
   value        = data.google_client_config.current.project
