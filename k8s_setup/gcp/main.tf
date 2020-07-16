@@ -149,7 +149,7 @@ resource "tfe_workspace" "project" {
   vcs_repo {
     identifier = "contino/helmfile-infra"
     ingress_submodules = false
-#    oauth_token_id = "TODO"
+    oauth_token_id = "TODO"
   }
 }
 
