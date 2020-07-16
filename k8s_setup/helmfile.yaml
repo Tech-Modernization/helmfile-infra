@@ -1,0 +1,21 @@
+apiVersion: apps.mumoshu.github.io/v1alpha1
+kind: Helmfile
+metadata:
+  name: infra
+spec:
+  #source: git::https://github.com/mumoshu/helmfile-operator//pkg/examplecontroller@assets?ref=master
+  source: git::https://github.com/bhood4/helmfile-infra?ref=master
+  #
+  # # Syntax sugar: The trailing "?ref=master" can be specified alternatively with `version`:
+  # version: master
+  #
+  # # Alternatively specify the container `image` for your own helmfile-applier.
+  # # See the README section for `example-applier` to see how you can build your own helmfile-applier.
+  # image:
+  #   repository: quay.io/examplecom/example
+  #   tag: v1.2.3
+  #
+  #values:
+  #  foo: FOO
+  #envvars:
+  #  bar: BAR

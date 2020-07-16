@@ -111,7 +111,16 @@ releases:
        args: ["apply", "-f", "resources/prometheus-operator-prometheus-scrape-confg.yaml" ]
      - events: ["postsync"]
        showlogs: true
-       command: "resource/loadall.sh" 
+       command: "./resource/load.sh" 
+       args: ["myapp-dashboards" ]
+     - events: ["postsync"]
+       showlogs: true
+       command: "./resource/load.sh" 
+       args: ["kafka-dashboards" ]
+     - events: ["postsync"]
+       showlogs: true
+       command: "./resource/load.sh" 
+       args: ["k8s-dashboards" ]
 {{ end }}
 
 
