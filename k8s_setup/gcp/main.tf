@@ -146,11 +146,17 @@ module "gke" {
 resource "tfe_workspace" "project" {
   organization = "bhood4"
   name         = data.google_client_config.current.project
-#  vcs_repo {
-#    identifier = "contino/helmfile-infra"
+  vcs_repo {
+    identifier = "contino/helmfile-infra"
+    ingress_submodules = false
 #    oauth_token_id = "TODO"
-#  }
+  }
 }
+
+vcs_repo {
+          - identifier         = "contino/helmfile-infra" -> null
+          - ingress_submodules = false -> null
+        }
 
 resource "tfe_variable" "project" {
   key          = "GOOGLE_PROJECT"
