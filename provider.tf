@@ -2,6 +2,10 @@ provider "google" {
   version = "~> 3.27"
 }
 
+provider "helmfile" {
+  version = "0.2.0"
+}
+
 provider "kubernetes" {
   version = "~> 1.11"
   load_config_file = false
