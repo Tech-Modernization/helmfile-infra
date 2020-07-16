@@ -1,5 +1,7 @@
 # gke env setup for helmfile-infra on GCP Sandbox Project
 
+use tfcloud with Contino GCP account
+
 Creates infrastructure for running GKE in private GCP Sandbox from terraform cloud:
 * VPC with primary subnet and secondary subnets for service/pods
 * private GKE (private nodes, public kubernetes API)
