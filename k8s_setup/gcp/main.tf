@@ -57,7 +57,7 @@ module "cloud-nat" {
   
 module "gke" {
   #source                 = "terraform-google-modules/kubernetes-engine/google"
-  source                            = "terraform-google-modules/kubernetes-engine/google//modules/private-cluster"
+  source                            = "terraform-google-modules/kubernetes-engine/google//modules/beta-private-cluster"
 
   # depends_on = [ "google_project_service.service" ]
 
@@ -76,6 +76,9 @@ module "gke" {
   network_policy                    = true
   horizontal_pod_autoscaling        = true
   create_service_account            = true
+
+  istio = true
+  cloudrun = true
 
 #  service_account                   = "create"
 #  remove_default_node_pool          = true
