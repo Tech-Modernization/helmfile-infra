@@ -51,4 +51,6 @@ resource "kubernetes_cluster_role_binding" "admin" {
 resource "helmfile_release_set" "mystack" {
     content = file("./helmfile.yaml")
     environment = "gcp"
+    #helm_binary = "helm-3.0.0"
+    binary = "helmfile-v0.93.0"
 }
