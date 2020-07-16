@@ -170,7 +170,7 @@ resource "tfe_variable" "region" {
 
 resource "tfe_variable" "credentials" {
   key          = "GOOGLE_CREDENTIALS"
-  value        = env.GOOGLE_CREDENTIALS
+  value        = var.TF_VAR_GOOGLE_CREDENTIALS
   category     = "env"
   sensitive    = true
   workspace_id = tfe_workspace.project.id
